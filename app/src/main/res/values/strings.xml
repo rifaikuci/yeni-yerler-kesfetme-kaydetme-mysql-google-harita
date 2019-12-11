@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">yeni-yerler-kesfetme-kaydetme-mysql-google-haritalar</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
