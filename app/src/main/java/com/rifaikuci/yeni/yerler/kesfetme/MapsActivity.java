@@ -1,8 +1,20 @@
 package com.rifaikuci.yeni.yerler.kesfetme;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.Manifest;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -13,10 +25,18 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -25,17 +45,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FloatingActionButton btnPlant,btnBird,btnPlaceAdd,btnPlaceSelect;
     boolean birdState  = false;
     boolean plantState = false;
+    ArrayList<dataInfo> data ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         transParanEkran();
+        data = new ArrayList<>();
+        data.add(new dataInfo("hayvan","hayvanAciklama",R.drawable.b1, new LatLng(37.717430, 30.286363),"h"));
+        data.add(new dataInfo("bitki","bitkiAciklama",R.drawable.p1, new LatLng(     37.717124, 30.288768),"b"));
+        data.add(new dataInfo("bitki2","hayvanAciklama",R.drawable.p1, new LatLng(     37.659385, 30.374563),"b"));
+
 
         btnPlant       = (FloatingActionButton) findViewById(R.id.btnPlant);
         btnBird        = (FloatingActionButton) findViewById(R.id.btnBird);
         btnPlaceAdd    = (FloatingActionButton) findViewById(R.id.btnPlaceAdd);
         btnPlaceSelect = (FloatingActionButton) findViewById(R.id.btnPlaceSelect);
-
 
 
         btnPlant.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +95,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-
         btnPlaceAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,8 +111,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -100,10 +122,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.6921974,32.0653447),5));
+        for (dataInfo object: data) {
+            if (object.getTur() == "h") {
+                int height = 75;
+                int width = 75;
+                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(object.getImage());
+                Bitmap b = bitmapdraw.getBitmap();
+                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
+                mMap.addMarker(new MarkerOptions()
+                        .position(object.getLatLng())
+                        .title((object.getName()))
+                        .snippet(object.getDesc().substring(0, 7))
+                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
+                );
+            }
+        }
     }
 
     //ekranı transpan yapar
