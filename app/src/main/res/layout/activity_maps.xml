@@ -16,26 +16,50 @@
         tools:context=".MapsActivity" />
 
 <com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/yerEkle"
+    android:id="@+id/btnPlant"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom|right"
-    app:backgroundTint="@color/success"
-    android:layout_margin="16dp"
-    android:src="@drawable/add"
+    android:layout_marginBottom="80dp"
+    android:layout_marginRight="16dp"
+    app:backgroundTint="@color/inverse"
+    android:src="@drawable/plant"
     />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/yerSec"
+        android:id="@+id/btnBird"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_gravity="bottom|right"
+        app:backgroundTint="@color/inverse"
+        android:layout_margin="16dp"
+        android:src="@drawable/bird"
+        />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnPlaceAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|left"
+        android:layout_marginBottom="80dp"
+        android:layout_marginLeft="16dp"
         app:backgroundTint="@color/info"
-        android:layout_margin="16dp"
+        android:src="@drawable/add"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnPlaceSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="16dp"
+        app:backgroundTint="@color/info"
         android:src="@drawable/list"
 
         />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

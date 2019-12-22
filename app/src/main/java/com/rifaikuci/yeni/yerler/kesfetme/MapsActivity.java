@@ -2,6 +2,7 @@ package com.rifaikuci.yeni.yerler.kesfetme;
 
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -21,31 +22,71 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private GoogleMap mMap;
-    FloatingActionButton yerEkle,yerSec;
-
+    FloatingActionButton btnPlant,btnBird,btnPlaceAdd,btnPlaceSelect;
+    boolean birdState  = false;
+    boolean plantState = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        transParanEkran();
         setContentView(R.layout.activity_maps);
-        yerEkle= (FloatingActionButton) findViewById(R.id.yerEkle);
-        yerSec= (FloatingActionButton) findViewById(R.id.yerSec);
+        transParanEkran();
+
+        btnPlant       = (FloatingActionButton) findViewById(R.id.btnPlant);
+        btnBird        = (FloatingActionButton) findViewById(R.id.btnBird);
+        btnPlaceAdd    = (FloatingActionButton) findViewById(R.id.btnPlaceAdd);
+        btnPlaceSelect = (FloatingActionButton) findViewById(R.id.btnPlaceSelect);
 
 
-        yerEkle.setOnClickListener(new View.OnClickListener() {
+
+        btnPlant.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Eklenme Yazısı",Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+
+                if(plantState==false) {
+
+                    btnPlant.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                    plantState=true;
+                }
+                else {
+                    btnPlant.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.inverse)));
+                    plantState=false;
+                }
+
             }
         });
 
-        yerSec.setOnClickListener(new View.OnClickListener() {
+        btnBird.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(),"Secme Yazısı",Toast.LENGTH_LONG).show();
+            public void onClick(View v) {
+                if(birdState==false) {
+
+                    btnBird.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                    birdState=true;
+                }
+                else {
+                    btnBird.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.inverse)));
+                    birdState=false;
+                }
             }
         });
+
+
+        btnPlaceAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"yer Eklenme ekranına gidecek",Toast.LENGTH_LONG).show();
+            }
+        });
+
+        btnPlaceSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"gidilecek yerleri seçme ekranına gidecek",Toast.LENGTH_LONG).show();
+            }
+        });
+
+
+
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
