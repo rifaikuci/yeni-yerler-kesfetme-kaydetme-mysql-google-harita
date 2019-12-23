@@ -1,7 +1,6 @@
 package com.rifaikuci.yeni.yerler.kesfetme;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -12,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,18 +25,12 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -46,6 +40,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     boolean birdState  = false;
     boolean plantState = false;
     ArrayList<dataInfo> data ;
+    LocationManager locationManager;
+    LocationListener locationListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,8 +118,44 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                mMap.setMyLocationEnabled(true);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+        /*
+        izin alırken api 23 arasında bir güncelleme geldi bu da kullanılabilir
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+        }else {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,5000,10,locationListener);
+        }*/
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            }
+        }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.6921974,32.0653447),5));
+
         for (dataInfo object: data) {
             if (object.getTur() == "h") {
                 int height = 75;
@@ -139,6 +171,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 );
             }
         }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+
+        if(grantResults.length > 0 ) {
+            if(requestCode == 1 ){
+                if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+
+                }
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     //ekranı transpan yapar

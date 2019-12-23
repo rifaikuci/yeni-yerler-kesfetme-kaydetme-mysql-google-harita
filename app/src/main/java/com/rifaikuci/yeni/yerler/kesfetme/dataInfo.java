@@ -4,12 +4,25 @@ import android.media.Image;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import static java.lang.Boolean.FALSE;
+
 public class dataInfo {
     String name;
     String desc;
     int image;
     LatLng latLng;
     String tur;
+    boolean isSelected = false;
+
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
 
     public String getName() {
         return name;
@@ -57,5 +70,6 @@ public class dataInfo {
         this.image = image;
         this.latLng = latLng;
         this.tur = tur;
+        this.isSelected=false;
     }
 }

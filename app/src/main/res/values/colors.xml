@@ -11,4 +11,5 @@
     <color name="faded">#f7f7f7</color>
     <color name="inverse">#292b2c</color>
     <color name="white">#ffffff</color>
+    <color name="gray">#a9a9a9</color>
 </resources>
