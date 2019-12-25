@@ -2,9 +2,7 @@ package com.rifaikuci.yeni.yerler.kesfetme;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.rifaikuci.yeni.yerler.kesfetme.MapsActivity;
-
+import com.google.android.gms.maps.model.LatLng;
 
 import android.content.Intent;
 import android.os.Build;
@@ -33,7 +31,19 @@ public class placeSelection extends AppCompatActivity {
 
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { txtBackClick(); }}); }
+            public void onClick(View v) { txtBackClick(); }});
+
+        dataInfo[] datas = new dataInfo[]{
+          new dataInfo("Tavus Kuşu ","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.bird,  new LatLng(37.717430, 30.286363),"h"),
+          new dataInfo("Tahta Kurusu","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.bird,  new LatLng(37.717430, 30.286363),"h"),
+          new dataInfo("deneme","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.bird,  new LatLng(37.717430, 30.286363),"h"),
+          new dataInfo("deneke","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.dene,  new LatLng(37.717430, 30.286363),"h"),
+        };
+
+
+        classAdapter adapter = new classAdapter(getApplicationContext(),R.layout.custom_view,datas);
+        listPlace.setAdapter(adapter);
+    }
 
 
     // geri butonu
@@ -47,7 +57,7 @@ public class placeSelection extends AppCompatActivity {
     private void variableDesc() {
         txtBack   = (TextView) findViewById(R.id.txtBack);
         btnRota   = (Button) findViewById(R.id.btnRota);
-        listPlace = (ListView) findViewById(R.id.listPlaces);
+        listPlace = (ListView) findViewById(R.id.listPlace);
 
 
     }
