@@ -1,55 +1,85 @@
 package com.rifaikuci.yeni.yerler.kesfetme;
 
-import android.content.Context;
-import android.media.Image;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-public class classAdapter extends ArrayAdapter<dataInfo> {
 
-    private  dataInfo[] dataList;
-    private  int resource;
+public class classAdapter extends BaseAdapter {
 
-    public classAdapter(@NonNull Context context, int resource, @NonNull dataInfo[] dataList) {
-        super(context, resource, dataList);
-        this.dataList = dataList;
-        this.resource = resource;
+    Activity activity;
+    List<dataInfo> datas;
+    LayoutInflater inflater;
+
+    public classAdapter(Activity activity, List<dataInfo> datas) {
+        this.activity = activity;
+        this.datas = datas;
+
+        inflater = activity.getLayoutInflater();
+
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
-        View row;
-
-        LayoutInflater layoutInflater = (LayoutInflater)  getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        row = layoutInflater.inflate(resource,null);
-
-        ImageView resimler  = (ImageView) row.findViewById(R.id.resimler);
-        TextView  basliklar = (TextView) row.findViewById(R.id.basliklar);
-        ImageView isCheck = (ImageView)  row.findViewById(R.id.checkler);
-
-
-        dataInfo veriler = dataList[position];
-
-        resimler.setImageResource(veriler.getImage());
-        basliklar.setText(veriler.getName());
-
-        if(veriler.isSelected ==false){
-            isCheck.setImageResource(R.drawable.check);
-        }else {
-            isCheck.setImageResource(R.drawable.checked);
-        }
-
-        return row;
-
+    public int getCount() {
+        return datas.size();
     }
+
+    @Override
+    public Object getItem(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public View getView(int i, View view, ViewGroup viewGroup) {
+
+        ViewHolder holder = null;
+
+        if (view == null) {
+            view = inflater.inflate(R.layout.custom_view, viewGroup, false);
+
+            holder = new ViewHolder();
+
+            holder.basliklar = (TextView) view.findViewById(R.id.basliklar);
+            holder.resimler = (ImageView) view.findViewById(R.id.resimler);
+            holder.checkler = (ImageView) view.findViewById(R.id.checkler);
+
+            view.setTag(holder);
+
+        }
+        else { holder = (ViewHolder) view.getTag();}
+
+            dataInfo model = datas.get(i);
+            holder.basliklar.setText(model.getName());
+            holder.resimler.setImageResource(model.getImage());
+
+            if (model.isSelected()) {
+                holder.checkler.setBackgroundResource(R.drawable.checked);
+            } else {
+                holder.checkler.setBackgroundResource(R.drawable.check);
+            }
+
+            return view;
+    }
+
+    public void updateRecords(List<dataInfo> datas){
+        this.datas = datas;
+        notifyDataSetChanged(); }
+
+    class ViewHolder {
+        TextView basliklar;
+        ImageView resimler;
+        ImageView checkler;
+    }
+
 }

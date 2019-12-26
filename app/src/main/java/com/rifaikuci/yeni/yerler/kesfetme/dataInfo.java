@@ -7,22 +7,26 @@ import com.google.android.gms.maps.model.LatLng;
 import static java.lang.Boolean.FALSE;
 
 public class dataInfo {
-    String name;
-    String desc;
-    int image;
-    LatLng latLng;
-    String tur;
+    String name; //türün ismi
+    String desc; //tür için açıklama
+    int image;  //tür resmi
+    LatLng latLng; //enlem boylam bilgisi
+    String tur; //bitki mi hayvan mı olup olmadığına bakılacak. bitki ise 'b' hayvan ise 'h' olarak kaydetecektir.
     boolean isSelected = false;
+    boolean isState = false; // ileride adminin onaylayabilmesi için gerekli bir kısım.
 
 
-    public boolean isSelected() {
-        return isSelected;
+    public boolean isState() {
+        return isState;
     }
+
+    public void setState(boolean state) { isState = state; }
+
+    public boolean isSelected() { return isSelected; }
 
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
-
 
     public String getName() {
         return name;
@@ -72,4 +76,5 @@ public class dataInfo {
         this.tur = tur;
         this.isSelected=false;
     }
+
 }

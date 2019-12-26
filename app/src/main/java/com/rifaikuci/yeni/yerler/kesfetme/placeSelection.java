@@ -9,10 +9,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,7 +24,10 @@ public class placeSelection extends AppCompatActivity {
 
     TextView txtBack;
     Button btnRota;
-    ListView listPlace;
+    classAdapter adapter;
+    static List<dataInfo> data;
+    ListView  listPlace;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,16 +39,38 @@ public class placeSelection extends AppCompatActivity {
             @Override
             public void onClick(View v) { txtBackClick(); }});
 
-        dataInfo[] datas = new dataInfo[]{
-          new dataInfo("Tavus Kuşu ","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.bird,  new LatLng(37.717430, 30.286363),"h"),
-          new dataInfo("Tahta Kurusu","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.bird,  new LatLng(37.717430, 30.286363),"h"),
-          new dataInfo("deneme","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.bird,  new LatLng(37.717430, 30.286363),"h"),
-          new dataInfo("deneke","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.dene,  new LatLng(37.717430, 30.286363),"h"),
-        };
+        data  = new ArrayList<>();
+        data.add(new dataInfo("tahat1","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.bird,  new LatLng(37.717430, 30.286363),"h"));
+        data.add(new dataInfo("tahat5","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.dene,  new LatLng(37.717430, 30.286363),"b"));
+        data.add(new dataInfo("tahat4","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.dene,  new LatLng(37.717430, 30.286363),"b"));
+        data.add(new dataInfo("tahat3","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.bird,  new LatLng(37.717430, 30.286363),"b"));
+        data.add(new dataInfo("tahat2","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.p1,  new LatLng(37.717430, 30.286363),"h"));
 
 
-        classAdapter adapter = new classAdapter(getApplicationContext(),R.layout.custom_view,datas);
+
+        adapter = new classAdapter(this, data);
         listPlace.setAdapter(adapter);
+        adapter.updateRecords(data);
+
+
+        //Satır click İslemleri
+        listPlace.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                dataInfo model = data.get(i);
+
+                if (model.isSelected()) {
+                    model.setSelected(false);
+                }
+                else { model.setSelected(true); }
+
+                data.set(i, model);
+
+                adapter.updateRecords(data);
+            }
+        });
+
     }
 
 
@@ -50,6 +78,7 @@ public class placeSelection extends AppCompatActivity {
     private void txtBackClick() {
         Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
         startActivity(intent);
+
     }
 
 
@@ -58,6 +87,7 @@ public class placeSelection extends AppCompatActivity {
         txtBack   = (TextView) findViewById(R.id.txtBack);
         btnRota   = (Button) findViewById(R.id.btnRota);
         listPlace = (ListView) findViewById(R.id.listPlace);
+
 
 
     }

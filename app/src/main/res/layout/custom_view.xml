@@ -13,7 +13,6 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_margin="2dp"
-        app:srcCompat="@drawable/bird"
         tools:ignore="VectorDrawableCompat" />
 
     <TextView
@@ -36,7 +35,7 @@
         android:layout_toRightOf="@+id/resimler"
         android:gravity="center"
         android:padding="15dp"
-        android:text="Adana"
+        android:text=""
         android:textColor="@color/white"
         android:textSize="18sp"
         app:fontFamily="monospace" />
