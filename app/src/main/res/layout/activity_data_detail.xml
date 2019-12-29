@@ -16,7 +16,7 @@
     android:layout_width="match_parent">
 
     <TextView
-        android:id="@+id/back"
+        android:id="@+id/txtBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -31,7 +31,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/baslik"
+        android:id="@+id/txtBaslik"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -42,8 +42,8 @@
         android:layout_marginRight="7dp"
         android:layout_toStartOf="@+id/volume"
         android:layout_toLeftOf="@+id/volume"
-        android:layout_toEndOf="@+id/back"
-        android:layout_toRightOf="@+id/back"
+        android:layout_toEndOf="@+id/txtBack"
+        android:layout_toRightOf="@+id/txtBack"
         android:gravity="center"
         android:paddingLeft="5dp"
         android:text="Hacılar Höyük Merkezi"
@@ -101,7 +101,7 @@
         android:layout_marginLeft="8dp"  >
 
         <TextView
-            android:id="@+id/textDetail"
+            android:id="@+id/txtDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="7dp"

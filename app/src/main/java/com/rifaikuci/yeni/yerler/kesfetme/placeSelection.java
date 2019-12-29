@@ -7,6 +7,7 @@ import com.google.android.gms.maps.model.LatLng;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -27,6 +28,7 @@ public class placeSelection extends AppCompatActivity {
     classAdapter adapter;
     static List<dataInfo> data;
     ListView  listPlace;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
