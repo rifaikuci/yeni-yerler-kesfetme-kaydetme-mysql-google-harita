@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent">
 
-
         <TextView
             android:id="@+id/txtBaslik"
             android:layout_width="match_parent"
@@ -41,7 +40,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_below="@+id/header"
-    android:layout_above="@id/bbtnYoklamaKaydet"
+    android:layout_above="@id/btnKaydet"
     android:layout_marginBottom="5dp"
 
     >
@@ -68,28 +67,177 @@
             app:srcCompat="@drawable/selection"
             tools:ignore="VectorDrawableCompat">
         </ImageView>
-        <!-- Burası düzeltilecek     -->
-        <TextView
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutTurAdi"
+            android:layout_below="@+id/imageSelect"
             android:layout_width="match_parent"
-            android:layout_below="@id/imageSelect"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            >
+            android:textColorHint="@color/primary"
+            android:layout_marginLeft="8dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp"
+            android:paddingRight="3dp"
+            android:paddingLeft="8dp"
+            android:layout_marginRight="5dp"
+            app:errorEnabled="true">
 
-        </TextView>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/EditTextTurAdi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tür Adı Giriniz"
+                android:padding="2dp"
+                android:textSize="16sp"
+                android:inputType="text"
+                android:textColor="#f27281">
+
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutTurDetayi"
+            android:layout_below="@+id/layoutTurAdi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/primary"
+            android:layout_marginLeft="8dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp"
+            android:paddingRight="3dp"
+            android:paddingLeft="8dp"
+            android:layout_marginRight="5dp"
+            app:errorEnabled="true">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/EditTextTurDetayi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tür Detayı Giriniz"
+                android:padding="2dp"
+                android:textSize="16sp"
+                android:lines="4"
+                android:maxLines="4"
+                android:inputType="textMultiLine"
+                android:textColor="#f27281">
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutKonum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/layoutTurDetayi"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toStartOf="@+id/locationIcon"
+            android:layout_toLeftOf="@+id/locationIcon"
+            android:paddingLeft="8dp"
+            android:paddingTop="1dp"
+            android:paddingRight="3dp"
+            android:paddingBottom="1dp"
+            android:textColorHint="@color/primary"
+            app:errorEnabled="true">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/EditTextKonum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Konumunuz için ikona tıklayın"
+                android:inputType="text"
+                android:lines="1"
+                android:enabled="false"
+                android:layout_marginLeft="8dp"
+                android:maxLines="1"
+                android:padding="2dp"
+                android:textColor="#f27281"
+                android:textSize="16sp">
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
 
+        <ImageView
+            android:id="@+id/locationIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/layoutTurDetayi"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="85dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_location_on_black_24dp">
+        </ImageView>
+
+        <RadioGroup
+            android:id="@+id/tur"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            android:layout_below="@id/layoutKonum"
+            android:background="#f27281">
+
+            <RadioButton
+                android:id="@+id/radioBitki"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bitki"
+                android:paddingRight="15dp"
+                android:textSize="15sp"
+                android:textStyle="bold">
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/radioKus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kuş"
+                android:paddingRight="15dp"
+                android:textSize="15sp"
+                android:textStyle="bold">
+            </RadioButton>
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/gonder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_margin="4dp"
+            android:layout_below="@id/tur"
+            android:background="#f27281">
+
+            <RadioButton
+                android:id="@+id/radioAktif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aktif"
+                android:textSize="15sp"
+                android:paddingRight="15dp"
+                android:textStyle="bold">
+            </RadioButton>
+
+            <RadioButton
+                android:id="@+id/radioPasif"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pasif"
+                android:textSize="15sp"
+                android:paddingRight="15dp"
+                android:textStyle="bold">
+            </RadioButton>
+        </RadioGroup>
     </RelativeLayout>
-
-
 </androidx.core.widget.NestedScrollView>
 
     <Button
-        android:id="@+id/bbtnYoklamaKaydet"
+        android:id="@+id/btnKaydet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -99,19 +247,16 @@
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@color/danger"
+        android:background="#5cb85c"
         android:padding="5dp"
         android:shadowColor="#A8A8A8"
-        android:shadowDx="0"
-
-        android:shadowDy="0"
         android:shadowRadius="5"
         android:text="Kaydet"
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/bbtnYoklamDSaKaydet"
+        android:id="@+id/btnVazgec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
@@ -120,18 +265,14 @@
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
-        android:background="@color/danger"
+        android:background="#d43f3a"
         android:padding="5dp"
         android:shadowColor="#A8A8A8"
-        android:shadowDx="0"
-
-        android:shadowDy="0"
         android:shadowRadius="5"
-        android:text="Kaydet"
+        android:text="Vazgeç"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         tools:ignore="DuplicateIds" />
-
 </RelativeLayout>
 
 

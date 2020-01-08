@@ -16,13 +16,14 @@
         android:theme="@style/AppTheme">
         <activity android:name=".data_add"
             android:theme="@style/Theme.AppCompat.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-        ></activity>
+        </activity>
         <activity
             android:name=".dataDetail"
             android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -48,7 +49,11 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps">
+
+
+
+        </activity>
 
 
     </application>
