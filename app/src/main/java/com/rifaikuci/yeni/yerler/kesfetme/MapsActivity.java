@@ -82,6 +82,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        mMap.setMyLocationEnabled(true);
+
 
         //locations
         locations();
@@ -113,7 +115,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void btnPlaceAddClick() {
-        Toast.makeText(getApplicationContext(),"yer Eklenme ekranına gidecek",Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(getApplicationContext(),data_add.class);
+        startActivity(intent);
     }
 
     private void btnBirdClick() {

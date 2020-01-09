@@ -83,7 +83,7 @@
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/EditTextTurAdi"
+                android:id="@+id/editTextTurAdi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Tür Adı Giriniz"
@@ -111,7 +111,7 @@
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/EditTextTurDetayi"
+                android:id="@+id/editTextTurDetayi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Tür Detayı Giriniz"
@@ -142,12 +142,12 @@
             app:errorEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/EditTextKonum"
+                android:id="@+id/editTextKonum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Konumunuz için ikona tıklayın"
-                android:inputType="text"
-                android:lines="1"
+                android:inputType="textMultiLine"
+                android:lines="2"
                 android:enabled="false"
                 android:layout_marginLeft="8dp"
                 android:maxLines="1"
