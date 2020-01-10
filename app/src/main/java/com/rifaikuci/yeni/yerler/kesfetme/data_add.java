@@ -1,10 +1,18 @@
 package com.rifaikuci.yeni.yerler.kesfetme;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +22,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -28,15 +38,54 @@ public class data_add extends AppCompatActivity  {
     RadioGroup tur, gonder;
     RadioButton radioBitki, radioKus, radioAktif, radioPasif;
     Button btnKaydet, btnVazgec;
-    double lat,log;
+    LocationManager locationManager;
+    LocationListener locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_add);
         transparanEkran();
-
         variableDesc();
+
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                MapsActivity.lat = location.getLatitude();
+                MapsActivity.log = location.getLongitude();
+                layoutKonum.getEditText().setText("Enlem :"+MapsActivity.lat+"\nBoylam :"+MapsActivity.log);
+
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                Toast.makeText(getApplicationContext(),"Konum Açık",Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Toast.makeText(getApplicationContext(),"Konum Açık Olmalı!",Toast.LENGTH_LONG).show();
+            }
+        };
+        if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},101);
+        }else{
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener);
+
+            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(lastLocation!= null){
+                MapsActivity.lat = lastLocation.getLatitude();
+                MapsActivity.log = lastLocation.getLongitude();
+                layoutKonum.getEditText().setText("Enlem :"+MapsActivity.lat+"\nBoylam :"+MapsActivity.log);
+            }
+        }
+
         btnVazgec.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,10 +116,9 @@ public class data_add extends AppCompatActivity  {
 
     }
 
-
     //ikonc click işlemleri
     private void locationIconClick() {
-        layoutKonum.getEditText().setText("Enlem :"+lat+"\nBoylam :"+log);
+        layoutKonum.getEditText().setText("Enlem :"+MapsActivity.lat+"\nBoylam :"+MapsActivity.log);
 
     }
 
@@ -107,9 +155,8 @@ public class data_add extends AppCompatActivity  {
 
         btnKaydet = (Button) findViewById(R.id.btnKaydet);
         btnVazgec = (Button) findViewById(R.id.btnVazgec);
-
-
     }
+
     //Crop İmage İşlemleri
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -121,6 +168,21 @@ public class data_add extends AppCompatActivity  {
                 imageSelect.setImageURI(resultUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if(grantResults.length>0){
+            if(requestCode==101){
+                if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener);
+
+                }
+
             }
         }
     }
@@ -139,7 +201,5 @@ public class data_add extends AppCompatActivity  {
         }
     }
 
-
-
-
+    //Bitiş
 }

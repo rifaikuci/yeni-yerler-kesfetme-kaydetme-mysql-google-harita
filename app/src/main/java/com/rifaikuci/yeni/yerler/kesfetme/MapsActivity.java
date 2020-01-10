@@ -6,13 +6,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -41,6 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     static ArrayList<dataInfo> data ;
     LocationManager locationManager;
     LocationListener locationListener;
+    public static double lat,log;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //değişkenleri tanımlama
         variableDesc();
-
 
         btnPlant.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,7 +70,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) { btnPlaceSelectClick(); }});
 
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -82,15 +79,61 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true);
+        try{
+            mMap.setMyLocationEnabled(true);
 
+        }catch (Exception e ){
+            e.toString();
+        }
 
         //locations
-        locations();
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                lat = location.getLatitude();
+                log = location.getLongitude();
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                Toast.makeText(getApplicationContext(), "Konum Açık", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Toast.makeText(getApplicationContext(), "Konum Açık Olmalı!", Toast.LENGTH_LONG).show();
+            }
+        };
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+        } else {
+            try{
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener);
+
+            }catch (Exception e ){
+                e.toString();
+            }
+
+            try {
+                Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (lastLocation != null) {
+                    lat = lastLocation.getLatitude();
+                    lat = lastLocation.getLongitude();
+                }
+            }catch (Exception e){
+                e.toString();
+            }
+        }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.6921974,32.0653447),5));
 
         for (dataInfo object: data) {
+
             if (object.getTur() == "h") {
                 int height = 75;
                 int width = 75;
@@ -105,6 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 );
             }
         }
+
        //location izinleri
         locationPermission();
     }
@@ -154,29 +198,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void locations() {
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                mMap.setMyLocationEnabled(true);
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-
 
     }
 
@@ -185,20 +206,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
         }else {
+            try{
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener);
+
+            }catch (Exception e ){
+                e.toString();
+            }
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(grantResults.length > 0 ) {
-            if(requestCode == 1 ){
+        if(grantResults.length>0){
+            if(requestCode==101){
                 if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+                    try{
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener);
+
+                    }catch (Exception e ){
+                        e.toString();
+                    }
 
                 }
+
             }
         }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     //ekranı transpan yapar
