@@ -42,11 +42,6 @@ public class placeSelection extends AppCompatActivity {
             public void onClick(View v) { txtBackClick(); }});
 
         data  = new ArrayList<>();
-        data.add(new dataInfo("tahat1","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.bird,  new LatLng(37.717430, 30.286363),"h"));
-        data.add(new dataInfo("tahat5","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.dene,  new LatLng(37.717430, 30.286363),"b"));
-        data.add(new dataInfo("tahat4","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.dene,  new LatLng(37.717430, 30.286363),"b"));
-        data.add(new dataInfo("tahat3","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.bird,  new LatLng(37.717430, 30.286363),"b"));
-        data.add(new dataInfo("tahat2","yumurtlayan omurgalılardan, akciğerli, sıcak kanlı, vücudu tüylerle örtülü, gagalı, iki ayaklı, iki kanatlı uçucu hayvanların ortak adı",R.drawable.p1,  new LatLng(37.717430, 30.286363),"h"));
 
 
 

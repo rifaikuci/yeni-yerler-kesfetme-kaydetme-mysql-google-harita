@@ -3,61 +3,111 @@ package com.rifaikuci.yeni.yerler.kesfetme;
 import android.media.Image;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import static java.lang.Boolean.FALSE;
 
 public class dataInfo {
-    String name; //türün ismi
-    String desc; //tür için açıklama
-    int image;  //tür resmi
-    LatLng latLng; //enlem boylam bilgisi
-    String tur; //bitki mi hayvan mı olup olmadığına bakılacak. bitki ise 'b' hayvan ise 'h' olarak kaydetecektir.
-    boolean isSelected = false;
-    boolean isState = false; // ileride adminin onaylayabilmesi için gerekli bir kısım.
+    @Expose
+    @SerializedName("idTur") private int idTur;
+    @Expose
+    @SerializedName("turAd") private String turAd;
+    @Expose
+    @SerializedName("turDetay") private String turDetay;
+    @Expose
+    @SerializedName("turResim") private String turResim;
+    @Expose
+    @SerializedName("turEnlem") private Double turEnlem;
+    @Expose
+    @SerializedName("turBoylam") private Double turBoylam;
+    @Expose
+    @SerializedName("tur") private String tur;
+    @Expose
+    @SerializedName("turDurum") private String turDurum;
+    @Expose
+    @SerializedName("idKullanici") private int idKullanici;
+    @Expose
+    @SerializedName("isSelected") private boolean isSelected = false;
+    @Expose
+    @SerializedName("success") private boolean success = false;
 
-
-    public boolean isState() {
-        return isState;
+    public boolean getSuccess() {
+        return success;
     }
 
-    public void setState(boolean state) { isState = state; }
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
 
+    public dataInfo(String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String turDurum) {
+        this.turAd = turAd;
+        this.turDetay = turDetay;
+        this.turResim = turResim;
+        this.turEnlem = turEnlem;
+        this.turBoylam = turBoylam;
+        this.tur = tur;
+        this.turDurum = turDurum;
+        this.isSelected =true;
+    }
+
+    public dataInfo(String turAd, String turDetay, Double turEnlem) {
+        this.turAd = turAd;
+        this.turDetay = turDetay;
+        this.turEnlem = turEnlem;
+    }
     public boolean isSelected() { return isSelected; }
 
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
 
-    public String getName() {
-        return name;
+    public int getIdTur() {
+        return idTur;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setIdTur(int idTur) {
+        this.idTur = idTur;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getTurAd() {
+        return turAd;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setTurAd(String turAd) {
+        this.turAd = turAd;
     }
 
-    public int getImage() {
-        return image;
+    public String getTurDetay() {
+        return turDetay;
     }
 
-    public void setImage(int image) {
-        this.image = image;
+    public void setTurDetay(String turDetay) {
+        this.turDetay = turDetay;
     }
 
-    public LatLng getLatLng() {
-        return latLng;
+    public String getTurResim() {
+        return turResim;
     }
 
-    public void setLatLng(LatLng latLng) {
-        this.latLng = latLng;
+    public void setTurResim(String turResim) {
+        this.turResim = turResim;
+    }
+
+    public Double getTurEnlem() {
+        return turEnlem;
+    }
+
+    public void setTurEnlem(Double turEnlem) {
+        this.turEnlem = turEnlem;
+    }
+
+    public Double getTurBoylam() {
+        return turBoylam;
+    }
+
+    public void setTurBoylam(Double turBoylam) {
+        this.turBoylam = turBoylam;
     }
 
     public String getTur() {
@@ -68,13 +118,19 @@ public class dataInfo {
         this.tur = tur;
     }
 
-    public dataInfo(String name, String desc, int image, LatLng latLng, String tur) {
-        this.name = name;
-        this.desc = desc;
-        this.image = image;
-        this.latLng = latLng;
-        this.tur = tur;
-        this.isSelected=false;
+    public String getTurDurum() {
+        return turDurum;
     }
 
+    public void setTurDurum(String turDurum) {
+        this.turDurum = turDurum;
+    }
+
+    public int getIdKullanici() {
+        return idKullanici;
+    }
+
+    public void setIdKullanici(int idKullanici) {
+        this.idKullanici = idKullanici;
+    }
 }

@@ -7,6 +7,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,10 +25,15 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class data_add extends AppCompatActivity  {
@@ -35,11 +41,14 @@ public class data_add extends AppCompatActivity  {
     ImageView imageSelect, locationIcon;
     TextInputLayout layoutTurAdi, layoutTurDetayi, layoutKonum;
     TextInputEditText editTextTurAdi, editTextTurDetayi, editTextKonum;
-    RadioGroup tur, gonder;
+    RadioGroup groupTur, groupGonder;
     RadioButton radioBitki, radioKus, radioAktif, radioPasif;
     Button btnKaydet, btnVazgec;
     LocationManager locationManager;
     LocationListener locationListener;
+    ProgressDialog progressDialog;
+    ApiInterface apiInterface;
+    String turAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +57,11 @@ public class data_add extends AppCompatActivity  {
         transparanEkran();
         variableDesc();
 
+
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
         locationListener = new LocationListener() {
+
             @Override
             public void onLocationChanged(Location location) {
                 MapsActivity.lat = location.getLatitude();
@@ -103,7 +115,25 @@ public class data_add extends AppCompatActivity  {
         btnKaydet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnKaydetClick();
+              turAd =editTextTurAdi.getText().toString();
+                String turDetay = editTextTurDetayi.getText().toString();
+                String turResim ="Resim yoluş";
+                Double turEnlem = MapsActivity.lat;
+                Double turBoylam= MapsActivity.log;
+
+                int radioTurId = groupTur.getCheckedRadioButtonId();
+                RadioButton rbTur = (RadioButton) findViewById(radioTurId);
+                String tur = rbTur.getText().toString();
+
+                int radioGonderId = groupGonder.getCheckedRadioButtonId();
+                RadioButton rbGonder = (RadioButton) findViewById(radioGonderId);
+                String turDurum = rbGonder.getText().toString();
+
+
+
+
+
+                btnKaydetClick(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum);
             }
         });
 
@@ -116,6 +146,9 @@ public class data_add extends AppCompatActivity  {
 
     }
 
+
+
+
     //ikonc click işlemleri
     private void locationIconClick() {
         layoutKonum.getEditText().setText("Enlem :"+MapsActivity.lat+"\nBoylam :"+MapsActivity.log);
@@ -123,8 +156,36 @@ public class data_add extends AppCompatActivity  {
     }
 
     //Kaydetme işlemleri
-    private void btnKaydetClick() {
+    private void btnKaydetClick(final String turAd,final String turDetay,final String turResim, final Double turEnlem,final Double turBoylam,final String tur,final String turDurum) {
+        progressDialog.show();
+        apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<dataInfo> call= apiInterface.saveData(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum);
 
+        call.enqueue(new Callback<dataInfo>() {
+            @Override
+            public void onResponse( @NonNull  Call<dataInfo> call,@NonNull Response<dataInfo> response) {
+                progressDialog.dismiss();
+                if( response.isSuccessful() && response.body() !=null){
+                    Boolean success  = response.body().getSuccess();
+
+                    if(success){
+                        Toast.makeText(getApplicationContext(),turAd+ " Başarılı bir Şekilde Kaydedildi",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                        startActivity(intent);
+
+                    }else {
+                        Toast.makeText(getApplicationContext(),"Kayıt eklenirken bir hata oluştu.",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull  Call<dataInfo> call, @NonNull Throwable t) {
+                    progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(),t.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     //geri butonu
@@ -145,8 +206,8 @@ public class data_add extends AppCompatActivity  {
         editTextTurDetayi = (TextInputEditText) findViewById(R.id.editTextTurDetayi);
         editTextKonum = (TextInputEditText) findViewById(R.id.editTextKonum);
 
-        tur = (RadioGroup) findViewById(R.id.tur);
-        gonder = (RadioGroup) findViewById(R.id.gonder);
+        groupTur = (RadioGroup) findViewById(R.id.groupTur);
+        groupGonder = (RadioGroup) findViewById(R.id.groupGonder);
 
         radioBitki = (RadioButton) findViewById(R.id.radioBitki);
         radioKus = (RadioButton) findViewById(R.id.radioKus);
@@ -155,6 +216,9 @@ public class data_add extends AppCompatActivity  {
 
         btnKaydet = (Button) findViewById(R.id.btnKaydet);
         btnVazgec = (Button) findViewById(R.id.btnVazgec);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Lütfen Bekleyiniz...");
     }
 
     //Crop İmage İşlemleri

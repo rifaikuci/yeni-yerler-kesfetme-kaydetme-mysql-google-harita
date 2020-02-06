@@ -60,8 +60,8 @@ public class classAdapter extends BaseAdapter {
         else { holder = (ViewHolder) view.getTag();}
 
             dataInfo model = datas.get(i);
-            holder.basliklar.setText(model.getName());
-            holder.resimler.setImageResource(model.getImage());
+            holder.basliklar.setText(model.getTurAd());
+            holder.resimler.setImageResource(Integer.parseInt(model.getTurResim()));
 
             if (model.isSelected()) {
                 holder.checkler.setBackgroundResource(R.drawable.checked);

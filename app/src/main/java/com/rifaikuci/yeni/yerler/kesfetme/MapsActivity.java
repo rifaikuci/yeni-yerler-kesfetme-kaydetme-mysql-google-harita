@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,9 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         transparanEkran();
         data = new ArrayList<>();
-        data.add(new dataInfo("hayvan","hayvanAciklama",R.drawable.b1, new LatLng(37.717430, 30.286363),"h"));
-        data.add(new dataInfo("bitki","bitkiAciklama",R.drawable.p1, new LatLng(     37.717124, 30.288768),"b"));
-        data.add(new dataInfo("bitki2","hayvanAciklama",R.drawable.p1, new LatLng(     37.659385, 30.374563),"b"));
+        data.add(new dataInfo("At","Ata bak","dsdssd",2.5445,3.122112,"bitki","0"));
 
         //değişkenleri tanımlama
         variableDesc();
@@ -137,13 +136,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             if (object.getTur() == "h") {
                 int height = 75;
                 int width = 75;
-                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(object.getImage());
+                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(Integer.parseInt(object.getTurResim()));
                 Bitmap b = bitmapdraw.getBitmap();
                 Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
                 mMap.addMarker(new MarkerOptions()
-                        .position(object.getLatLng())
-                        .title((object.getName()))
-                        .snippet(object.getDesc().substring(0, 7))
+                        .position(new LatLng(object.getTurBoylam(),object.getTurEnlem()))
+                        .title((object.getTurAd()))
+                        .snippet(object.getTurDetay().substring(0, 7))
                         .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
                 );
             }

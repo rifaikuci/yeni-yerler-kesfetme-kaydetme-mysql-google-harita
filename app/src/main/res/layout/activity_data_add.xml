@@ -173,7 +173,7 @@
         </ImageView>
 
         <RadioGroup
-            android:id="@+id/tur"
+            android:id="@+id/groupTur"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
@@ -204,13 +204,13 @@
         </RadioGroup>
 
         <RadioGroup
-            android:id="@+id/gonder"
+            android:id="@+id/groupGonder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_margin="4dp"
-            android:layout_below="@id/tur"
+            android:layout_below="@id/groupTur"
             android:background="#f27281">
 
             <RadioButton
