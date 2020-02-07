@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
@@ -25,9 +26,15 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -40,6 +47,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     LocationManager locationManager;
     LocationListener locationListener;
     public static double lat,log;
+    ProgressDialog progressDialog;
+    ApiInterface apiInterface ;
+    ArrayList<Marker> bitkiler,kuslar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,10 +58,64 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         transparanEkran();
         data = new ArrayList<>();
-        data.add(new dataInfo("At","Ata bak","dsdssd",2.5445,3.122112,"bitki","0"));
+        apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<dataInfo>> call= apiInterface.getTurler();
 
+
+//        data.add(new dataInfo(15,"At","Ata bak","dsdssd",2.5445,3.122112,"bitki","deneme"));
+
+        call.enqueue(new Callback<List<dataInfo>>() {
+            @Override
+            public void onResponse(Call<List<dataInfo>> call, Response<List<dataInfo>> response) {
+                progressDialog.dismiss();
+                if( response.isSuccessful() && response.body() !=null){
+                    data = (ArrayList<dataInfo>) response.body();
+                    for (int i =0;i<data.size();i++){
+                        if(data.get(i).getTur().equalsIgnoreCase("Bitki")) {
+                           try {
+
+                               Marker adana = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
+                                       .title(data.get(i).getTurAd())
+                                       .snippet(data.get(i).getTurDetay().substring(0, 5)).visible(false));
+
+
+                               bitkiler.add(adana);
+                           }catch (Exception e){
+                               e.printStackTrace();
+                           }
+
+                        }else
+                        {
+
+                            try {
+
+                                Marker adana = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
+                                        .title(data.get(i).getTurAd())
+                                        .snippet(data.get(i).getTurDetay().substring(0, 5)).visible(false));
+
+
+                                kuslar.add(adana);
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<List<dataInfo>> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
+            }
+        });
         //değişkenleri tanımlama
         variableDesc();
+
+
 
         btnPlant.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +195,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.6921974,32.0653447),5));
 
+
+        /*
         for (dataInfo object: data) {
 
             if (object.getTur() == "h") {
@@ -147,6 +214,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         }
 
+         */
+
        //location izinleri
         locationPermission();
     }
@@ -163,11 +232,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void btnBirdClick() {
         if(birdState==false) {
+            for (int i = 0; i<kuslar.size();i++){
+                kuslar.get(i).setVisible(true);
+            }
 
             btnBird.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
             birdState=true;
+
         }
         else {
+            for (int i = 0; i<kuslar.size();i++){
+                kuslar.get(i).setVisible(false);
+            }
             btnBird.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.inverse)));
             birdState=false;
         }
@@ -175,11 +251,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void btnPlantClick() {
         if(plantState==false) {
-
+            for (int i = 0; i<bitkiler.size();i++){
+                bitkiler.get(i).setVisible(true);
+            }
             btnPlant.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
             plantState=true;
         }
         else {
+            for (int i = 0; i<bitkiler.size();i++){
+                bitkiler.get(i).setVisible(false);
+            }
             btnPlant.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.inverse)));
             plantState=false;
         }
@@ -192,6 +273,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnBird        = (FloatingActionButton) findViewById(R.id.btnBird);
         btnPlaceAdd    = (FloatingActionButton) findViewById(R.id.btnPlaceAdd);
         btnPlaceSelect = (FloatingActionButton) findViewById(R.id.btnPlaceSelect);
+        bitkiler = new ArrayList<>();
+        kuslar = new ArrayList<>();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Lütfen Bekleyiniz...");
 
     }
 

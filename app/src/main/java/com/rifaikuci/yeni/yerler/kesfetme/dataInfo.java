@@ -25,6 +25,17 @@ public class dataInfo {
     @SerializedName("tur") private String tur;
     @Expose
     @SerializedName("turDurum") private String turDurum;
+
+    public String getTurKayitTarih() {
+        return turKayitTarih;
+    }
+
+    public void setTurKayitTarih(String turKayitTarih) {
+        this.turKayitTarih = turKayitTarih;
+    }
+
+    @Expose
+    @SerializedName("turKayitTarih") private String turKayitTarih;
     @Expose
     @SerializedName("idKullanici") private int idKullanici;
     @Expose
@@ -51,11 +62,18 @@ public class dataInfo {
         this.isSelected =true;
     }
 
-    public dataInfo(String turAd, String turDetay, Double turEnlem) {
+    public dataInfo(int idTur, String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String turKayitTarih,boolean isSelected) {
+        this.idTur = idTur;
         this.turAd = turAd;
         this.turDetay = turDetay;
+        this.turResim = turResim;
         this.turEnlem = turEnlem;
+        this.turBoylam = turBoylam;
+        this.tur = tur;
+        this.turKayitTarih = turKayitTarih;
+        isSelected = true;
     }
+
     public boolean isSelected() { return isSelected; }
 
     public void setSelected(boolean selected) {
@@ -72,6 +90,17 @@ public class dataInfo {
 
     public String getTurAd() {
         return turAd;
+    }
+
+    public dataInfo(int idTur,String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, boolean isSelected) {
+        this.turAd = turAd;
+        this.turDetay = turDetay;
+        this.turResim = turResim;
+        this.turEnlem = turEnlem;
+        this.turBoylam = turBoylam;
+        this.tur = tur;
+        this.isSelected = isSelected;
+        this.idTur =idTur;
     }
 
     public void setTurAd(String turAd) {

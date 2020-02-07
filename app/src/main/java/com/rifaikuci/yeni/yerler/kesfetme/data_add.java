@@ -120,8 +120,8 @@ public class data_add extends AppCompatActivity  {
         btnKaydet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                turAd =editTextTurAdi.getText().toString();
-                String turDetay = editTextTurDetayi.getText().toString();
+                turAd =editTextTurAdi.getText().toString().trim();
+                String turDetay = editTextTurDetayi.getText().toString().trim();
                 String turResim =imageToString();
                 Double turEnlem = MapsActivity.lat;
                 Double turBoylam= MapsActivity.log;
@@ -163,29 +163,29 @@ public class data_add extends AppCompatActivity  {
 
         call.enqueue(new Callback<dataInfo>() {
             @Override
-            public void onResponse( @NonNull  Call<dataInfo> call,@NonNull Response<dataInfo> response) {
-                progressDialog.dismiss();
-                if( response.isSuccessful() && response.body() !=null){
-                    Boolean success  = response.body().getSuccess();
+        public void onResponse( @NonNull  Call<dataInfo> call,@NonNull Response<dataInfo> response) {
+            progressDialog.dismiss();
+            if( response.isSuccessful() && response.body() !=null){
+                Boolean success  = response.body().getSuccess();
 
-                    if(success){
-                        Toast.makeText(getApplicationContext(),turAd+ " Başarılı bir Şekilde Kaydedildi",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                        startActivity(intent);
+                if(success){
+                    Toast.makeText(getApplicationContext(),turAd+ " Başarılı bir Şekilde Kaydedildi",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                    startActivity(intent);
 
-                    }else {
-                        Toast.makeText(getApplicationContext(),"Kayıt eklenirken bir hata oluştu.",Toast.LENGTH_SHORT).show();
-                    }
+                }else {
+                    Toast.makeText(getApplicationContext(),"Kayıt eklenirken bir hata oluştu.",Toast.LENGTH_SHORT).show();
                 }
             }
+        }
 
-            @Override
-            public void onFailure(@NonNull  Call<dataInfo> call, @NonNull Throwable t) {
-                    progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
+        @Override
+        public void onFailure(@NonNull  Call<dataInfo> call, @NonNull Throwable t) {
+            progressDialog.dismiss();
+            Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
 
-            }
-        });
+        }
+    });
     }
 
     //geri butonu
