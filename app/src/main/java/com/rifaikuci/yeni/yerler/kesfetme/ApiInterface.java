@@ -17,6 +17,5 @@ public interface ApiInterface {
             @Field("turBoylam") Double turBoylam,
             @Field("tur") String tur,
             @Field("turDurum") String turDurum
-
             );
 }

@@ -11,12 +11,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -25,11 +28,13 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,6 +54,8 @@ public class data_add extends AppCompatActivity  {
     ProgressDialog progressDialog;
     ApiInterface apiInterface;
     String turAd;
+    Uri resultUri;
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,9 +64,7 @@ public class data_add extends AppCompatActivity  {
         transparanEkran();
         variableDesc();
 
-
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
         locationListener = new LocationListener() {
 
             @Override
@@ -115,9 +120,9 @@ public class data_add extends AppCompatActivity  {
         btnKaydet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              turAd =editTextTurAdi.getText().toString();
+                turAd =editTextTurAdi.getText().toString();
                 String turDetay = editTextTurDetayi.getText().toString();
-                String turResim ="Resim yoluş";
+                String turResim =imageToString();
                 Double turEnlem = MapsActivity.lat;
                 Double turBoylam= MapsActivity.log;
 
@@ -128,10 +133,6 @@ public class data_add extends AppCompatActivity  {
                 int radioGonderId = groupGonder.getCheckedRadioButtonId();
                 RadioButton rbGonder = (RadioButton) findViewById(radioGonderId);
                 String turDurum = rbGonder.getText().toString();
-
-
-
-
 
                 btnKaydetClick(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum);
             }
@@ -147,8 +148,6 @@ public class data_add extends AppCompatActivity  {
     }
 
 
-
-
     //ikonc click işlemleri
     private void locationIconClick() {
         layoutKonum.getEditText().setText("Enlem :"+MapsActivity.lat+"\nBoylam :"+MapsActivity.log);
@@ -158,6 +157,7 @@ public class data_add extends AppCompatActivity  {
     //Kaydetme işlemleri
     private void btnKaydetClick(final String turAd,final String turDetay,final String turResim, final Double turEnlem,final Double turBoylam,final String tur,final String turDurum) {
         progressDialog.show();
+
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
         Call<dataInfo> call= apiInterface.saveData(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum);
 
@@ -182,7 +182,7 @@ public class data_add extends AppCompatActivity  {
             @Override
             public void onFailure(@NonNull  Call<dataInfo> call, @NonNull Throwable t) {
                     progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(),t.getLocalizedMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -228,7 +228,7 @@ public class data_add extends AppCompatActivity  {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                Uri resultUri = result.getUri();
+                resultUri = result.getUri();
                 imageSelect.setImageURI(resultUri);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
@@ -255,6 +255,8 @@ public class data_add extends AppCompatActivity  {
     private void imageSelectClick() {
         ActivityCompat.requestPermissions(data_add.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
         CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(this);
+
+
     }
 
     public void transparanEkran() {
@@ -264,6 +266,21 @@ public class data_add extends AppCompatActivity  {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
+
+private String imageToString(){
+//Resim işlemleri resultUri -> resim yoluu bildirme
+    try {
+        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(),resultUri);
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+
+    //Resmi yazıya çevirme sunucuya post etme
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        byte[] imgByte = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(imgByte,Base64.DEFAULT);
+}
 
     //Bitiş
 }
