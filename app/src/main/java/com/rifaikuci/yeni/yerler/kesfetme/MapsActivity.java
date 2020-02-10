@@ -10,8 +10,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,6 +27,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +35,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     FloatingActionButton btnPlant,btnBird,btnPlaceAdd,btnPlaceSelect;
@@ -51,18 +50,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ApiInterface apiInterface ;
     ArrayList<Marker> bitkiler,kuslar;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         transparanEkran();
         data = new ArrayList<>();
+        // get komutu ile verilerimizi getirildi.
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<dataInfo>> call= apiInterface.getTurler();
-
-
-//        data.add(new dataInfo(15,"At","Ata bak","dsdssd",2.5445,3.122112,"bitki","deneme"));
 
         call.enqueue(new Callback<List<dataInfo>>() {
             @Override
@@ -74,37 +70,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         if(data.get(i).getTur().equalsIgnoreCase("Bitki")) {
                            try {
 
-                               Marker adana = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
+                               Marker gecici = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
                                        .title(data.get(i).getTurAd())
+                                       .icon(BitmapDescriptorFactory.fromResource(R.drawable.leaf))
                                        .snippet(data.get(i).getTurDetay().substring(0, 5)).visible(false));
 
+                               bitkiler.add(gecici);
 
-                               bitkiler.add(adana);
-                           }catch (Exception e){
-                               e.printStackTrace();
-                           }
-
-                        }else
+                           }catch (Exception e){ e.printStackTrace(); } }else
                         {
-
                             try {
 
-                                Marker adana = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
+                                Marker gedici = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
                                         .title(data.get(i).getTurAd())
+                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.dove))
                                         .snippet(data.get(i).getTurDetay().substring(0, 5)).visible(false));
 
+                                kuslar.add(gedici);
 
-                                kuslar.add(adana);
-                            }catch (Exception e){
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-
-
-                }
-
-            }
+                            }catch (Exception e){ e.printStackTrace(); } } } } }
 
             @Override
             public void onFailure(Call<List<dataInfo>> call, Throwable t) {
@@ -112,10 +96,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
             }
         });
+
         //değişkenleri tanımlama
         variableDesc();
-
-
 
         btnPlant.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,12 +125,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        try{
-            mMap.setMyLocationEnabled(true);
+        try{ mMap.setMyLocationEnabled(true); } // haritada konumu gösterme
+        catch (Exception e ){ e.toString(); }
 
-        }catch (Exception e ){
-            e.toString();
-        }
 
         //locations
         locationListener = new LocationListener() {
@@ -158,9 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
+            public void onStatusChanged(String provider, int status, Bundle extras) { }
 
             @Override
             public void onProviderEnabled(String provider) {
@@ -172,53 +150,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(getApplicationContext(), "Konum Açık Olmalı!", Toast.LENGTH_LONG).show();
             }
         };
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
-        } else {
-            try{
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener);
 
-            }catch (Exception e ){
-                e.toString();
-            }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101); }
+
+        else { try{
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener); }
+
+            catch (Exception e ){ e.toString(); }
 
             try {
                 Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 if (lastLocation != null) {
                     lat = lastLocation.getLatitude();
-                    lat = lastLocation.getLongitude();
-                }
-            }catch (Exception e){
-                e.toString();
-            }
-        }
+                    lat = lastLocation.getLongitude(); } }
+
+            catch (Exception e){ e.toString(); } }
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.6921974,32.0653447),5));
-
-
-        /*
-        for (dataInfo object: data) {
-
-            if (object.getTur() == "h") {
-                int height = 75;
-                int width = 75;
-                BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(Integer.parseInt(object.getTurResim()));
-                Bitmap b = bitmapdraw.getBitmap();
-                Bitmap smallMarker = Bitmap.createScaledBitmap(b, width, height, false);
-                mMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(object.getTurBoylam(),object.getTurEnlem()))
-                        .title((object.getTurAd()))
-                        .snippet(object.getTurDetay().substring(0, 7))
-                        .icon(BitmapDescriptorFactory.fromBitmap(smallMarker))
-                );
-            }
-        }
-
-         */
-
-       //location izinleri
+        //location izinleri
         locationPermission();
     }
+
 
     private void btnPlaceSelectClick() {
         Intent intent = new Intent(getApplicationContext(),placeSelection.class);
@@ -232,18 +185,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void btnBirdClick() {
         if(birdState==false) {
-            for (int i = 0; i<kuslar.size();i++){
-                kuslar.get(i).setVisible(true);
-            }
+            for (int i = 0; i<kuslar.size();i++){ kuslar.get(i).setVisible(true); }
 
             btnBird.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
-            birdState=true;
+            birdState=true; }
 
-        }
         else {
             for (int i = 0; i<kuslar.size();i++){
-                kuslar.get(i).setVisible(false);
+             kuslar.get(i).setVisible(false);
+
             }
+
             btnBird.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.inverse)));
             birdState=false;
         }
@@ -254,18 +206,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             for (int i = 0; i<bitkiler.size();i++){
                 bitkiler.get(i).setVisible(true);
             }
+
             btnPlant.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
             plantState=true;
         }
+
         else {
             for (int i = 0; i<bitkiler.size();i++){
                 bitkiler.get(i).setVisible(false);
             }
+
             btnPlant.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.inverse)));
             plantState=false;
-        }
+            } }
 
-    }
 
     private void variableDesc() {
 
@@ -278,7 +232,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Lütfen Bekleyiniz...");
-
     }
 
     private void locations() {
@@ -330,4 +283,5 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
+
 }
