@@ -3,7 +3,6 @@ package com.rifaikuci.yeni.yerler.kesfetme;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -11,17 +10,20 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
 public class dataDetail extends AppCompatActivity {
 
     TextView txtBack, txtBaslik,txtDetail;
-    ImageView image,volume;
+    ImageView image,volume,edit,delete;
     boolean sesDurumu=false;
     TextToSpeech textToSpeech;
+    Intent intent;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +31,11 @@ public class dataDetail extends AppCompatActivity {
         setContentView(R.layout.activity_data_detail);
         transparanEkran();
         variableDesc();
+
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { txtBackClick(); }});
+
 
 
         textToSpeech=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
@@ -44,6 +48,24 @@ public class dataDetail extends AppCompatActivity {
             }
         });
 
+
+        String gelenId=intent.getStringExtra("tur");
+
+
+        try {
+
+            String baslik = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurAd();
+            String resim= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurResim();
+            String detay= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDetay();
+
+            String tarihDuzenli=  tarih(MapsActivity.data.get(Integer.parseInt(gelenId)).getTurKayitTarih());
+            txtBaslik.setText(baslik);
+            Picasso.get().load(resim).into(image);
+            txtDetail.setText("Kayıt Tarihi : " + tarihDuzenli + " \n"+ detay);
+        }catch (Exception e ){
+            System.out.println(e.toString());
+        }
+
         volume.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -51,6 +73,29 @@ public class dataDetail extends AppCompatActivity {
             }
         });
 
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editClick();
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteClick();
+            }
+        });
+
+    }
+
+    private void deleteClick() {
+        Toast.makeText(getApplicationContext(),"Silme işlemleri yapılacak",Toast.LENGTH_LONG).show();
+    }
+
+    private void editClick() {
+
+        Toast.makeText(getApplicationContext(),"Düzenleme işlemleri yapılacak",Toast.LENGTH_LONG).show();
     }
 
     private void volumeClick() {
@@ -82,6 +127,10 @@ public class dataDetail extends AppCompatActivity {
         txtDetail  = (TextView) findViewById(R.id.txtDetail);
         image      = (ImageView) findViewById(R.id.image);
         volume     = (ImageView) findViewById(R.id.volume);
+        edit       = (ImageView) findViewById(R.id.edit);
+        delete     = (ImageView) findViewById(R.id.delete);
+
+        intent  = getIntent();
     }
     public  void  onPause() {
         super.onPause();
@@ -102,6 +151,39 @@ public class dataDetail extends AppCompatActivity {
         {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+    }
+
+    public String tarih(String s){
+
+        String[] separated = s.split(" ");
+        String[] gecici = separated[0].split("-");
+        int ayInt =Integer.parseInt( gecici[1]);
+        String yil= "";
+        String gun= "";
+        String ay ="";
+                String tarih;
+        gun =gecici[2];
+        yil =gecici[0];
+
+
+
+        switch (ayInt){
+            case 1: ay = "Ocak"; break;
+            case 2: ay = "Şubat"; break;
+            case 3: ay = "Mart"; break;
+            case 4: ay = "Nisan"; break;
+            case 5: ay = "Mayıs"; break;
+            case 6: ay = "Haziran"; break;
+            case 7: ay = "Temmuz"; break;
+            case 8: ay = "Ağustos"; break;
+            case 9: ay = "Eylül"; break;
+            case 10: ay = "Ekim"; break;
+            case 11: ay = "Kasım"; break;
+            case 12: ay = "Aralık"; break;
+            default: tarih = "Hatalı Değer";
+        }
+       tarih =gun +" "+ay+ " "+yil ;
+        return tarih;
     }
 }
 

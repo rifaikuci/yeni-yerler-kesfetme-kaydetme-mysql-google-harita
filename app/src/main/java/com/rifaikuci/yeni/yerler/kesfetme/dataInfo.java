@@ -92,7 +92,7 @@ public class dataInfo {
         return turAd;
     }
 
-    public dataInfo(int idTur,String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, boolean isSelected) {
+    public dataInfo(int idTur,String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, boolean isSelected,int idKullanici) {
         this.turAd = turAd;
         this.turDetay = turDetay;
         this.turResim = turResim;
@@ -101,6 +101,7 @@ public class dataInfo {
         this.tur = tur;
         this.isSelected = isSelected;
         this.idTur =idTur;
+        this.idKullanici=idKullanici;
     }
 
     public void setTurAd(String turAd) {

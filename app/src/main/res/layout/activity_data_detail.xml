@@ -32,23 +32,23 @@
 
     <TextView
         android:id="@+id/txtBaslik"
-        android:layout_width="match_parent"
+        android:layout_width="204dp"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:layout_toStartOf="@+id/volume"
-        android:layout_toLeftOf="@+id/volume"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_toStartOf="@+id/delete"
+        android:layout_toLeftOf="@+id/delete"
         android:layout_toEndOf="@+id/txtBack"
         android:layout_toRightOf="@+id/txtBack"
         android:gravity="center"
         android:paddingLeft="5dp"
         android:text="Hacılar Höyük Merkezi"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
 
@@ -60,8 +60,39 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="34dp"
         android:layout_marginRight="15dp"
+        android:visibility="visible"
         app:srcCompat="@drawable/ic_volume_off_black_24dp"
         tools:ignore="VectorDrawableCompat" />
+
+    <ImageView
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="31dp"
+        android:layout_toStartOf="@+id/volume"
+        android:layout_toLeftOf="@+id/volume"
+        android:visibility="visible"
+        app:srcCompat="@drawable/edit"
+        tools:ignore="VectorDrawableCompat" />
+
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="18dp"
+        android:layout_toStartOf="@+id/edit"
+        android:layout_toLeftOf="@+id/edit"
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_delete_forever_black_24dp"
+        tools:ignore="VectorDrawableCompat" />
+
+
 </RelativeLayout>
 
 

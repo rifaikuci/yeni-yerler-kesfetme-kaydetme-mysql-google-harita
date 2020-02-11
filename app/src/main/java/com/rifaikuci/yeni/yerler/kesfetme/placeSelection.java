@@ -16,9 +16,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class placeSelection extends AppCompatActivity {
 
@@ -26,7 +23,6 @@ public class placeSelection extends AppCompatActivity {
     TextView txtBack;
     Button btnRota;
     classAdapter adapter;
-    static List<dataInfo> data;
     ListView  listPlace;
 
 
@@ -41,13 +37,13 @@ public class placeSelection extends AppCompatActivity {
             @Override
             public void onClick(View v) { txtBackClick(); }});
 
-        data  = new ArrayList<>();
 
 
 
-        adapter = new classAdapter(this, data);
+
+        adapter = new classAdapter(this, MapsActivity.data);
         listPlace.setAdapter(adapter);
-        adapter.updateRecords(data);
+        adapter.updateRecords(MapsActivity.data);
 
 
         //Satır click İslemleri
@@ -55,16 +51,16 @@ public class placeSelection extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                dataInfo model = data.get(i);
+                dataInfo model = MapsActivity.data.get(i);
 
                 if (model.isSelected()) {
                     model.setSelected(false);
                 }
                 else { model.setSelected(true); }
 
-                data.set(i, model);
+                MapsActivity.data.set(i, model);
 
-                adapter.updateRecords(data);
+                adapter.updateRecords(MapsActivity.data);
             }
         });
 

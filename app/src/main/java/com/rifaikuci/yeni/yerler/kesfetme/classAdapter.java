@@ -7,6 +7,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 
@@ -61,7 +64,7 @@ public class classAdapter extends BaseAdapter {
 
             dataInfo model = datas.get(i);
             holder.basliklar.setText(model.getTurAd());
-            holder.resimler.setImageResource(Integer.parseInt(model.getTurResim()));
+        Picasso.get().load(datas.get(i).getTurResim()).into(holder.resimler);
 
             if (model.isSelected()) {
                 holder.checkler.setBackgroundResource(R.drawable.checked);

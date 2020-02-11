@@ -48,6 +48,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static double lat,log;
     ProgressDialog progressDialog;
     ApiInterface apiInterface ;
+    static  Marker gecici;
     ArrayList<Marker> bitkiler,kuslar;
 
     @Override
@@ -55,7 +56,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         transparanEkran();
-        data = new ArrayList<>();
+        //değişkenleri tanımlama
+        variableDesc();
+
         // get komutu ile verilerimizi getirildi.
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
         Call<List<dataInfo>> call= apiInterface.getTurler();
@@ -64,13 +67,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onResponse(Call<List<dataInfo>> call, Response<List<dataInfo>> response) {
                 progressDialog.dismiss();
+
                 if( response.isSuccessful() && response.body() !=null){
+
                     data = (ArrayList<dataInfo>) response.body();
+
+
                     for (int i =0;i<data.size();i++){
+
+
+
                         if(data.get(i).getTur().equalsIgnoreCase("Bitki")) {
                            try {
 
-                               Marker gecici = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
+                               gecici = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
                                        .title(data.get(i).getTurAd())
                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.leaf))
                                        .snippet(data.get(i).getTurDetay().substring(0, 5)).visible(false));
@@ -88,7 +98,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                 kuslar.add(gedici);
 
-                            }catch (Exception e){ e.printStackTrace(); } } } } }
+                            }catch (Exception e){ e.printStackTrace(); } } } }
+            }
+
+
 
             @Override
             public void onFailure(Call<List<dataInfo>> call, Throwable t) {
@@ -97,8 +110,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        //değişkenleri tanımlama
-        variableDesc();
+
+
+
+
 
         btnPlant.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,6 +165,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Toast.makeText(getApplicationContext(), "Konum Açık Olmalı!", Toast.LENGTH_LONG).show();
             }
         };
+
+       mMap.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
+           @Override
+           public void onInfoWindowLongClick(Marker marker) {
+
+
+
+               Intent intent = new Intent(getApplicationContext(), dataDetail.class);
+               intent.putExtra("tur",marker.getId().substring(1));
+               startActivity(intent);
+
+           }
+
+       });
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101); }
@@ -229,7 +258,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         btnPlaceSelect = (FloatingActionButton) findViewById(R.id.btnPlaceSelect);
         bitkiler = new ArrayList<>();
         kuslar = new ArrayList<>();
-
+        data = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Lütfen Bekleyiniz...");
     }
