@@ -42,7 +42,7 @@ import retrofit2.Response;
 
 
 public class data_add extends AppCompatActivity  {
-
+sss
     ImageView imageSelect, locationIcon;
     TextInputLayout layoutTurAdi, layoutTurDetayi, layoutKonum;
     TextInputEditText editTextTurAdi, editTextTurDetayi, editTextKonum;
