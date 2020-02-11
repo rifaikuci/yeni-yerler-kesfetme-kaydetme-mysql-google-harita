@@ -50,7 +50,7 @@ public class data_add extends AppCompatActivity  {
     RadioButton radioBitki, radioKus, radioAktif, radioPasif;
     Button btnKaydet, btnVazgec;
     LocationManager locationManager;
-    LocationListener locationListener;a
+    LocationListener locationListener;
     ProgressDialog progressDialog;
     ApiInterface apiInterface;
     String turAd;
