@@ -175,6 +175,12 @@ public class dataDetail extends AppCompatActivity {
 
     private void editClick() {
 
+        Intent intent = new Intent(getApplicationContext(), data_add.class);
+        intent.putExtra("gelis","edit");
+        intent.putExtra("guncelleId",gelenId);
+
+
+        startActivity(intent);
         Toast.makeText(getApplicationContext(),"Düzenleme işlemleri yapılacak",Toast.LENGTH_LONG).show();
     }
 

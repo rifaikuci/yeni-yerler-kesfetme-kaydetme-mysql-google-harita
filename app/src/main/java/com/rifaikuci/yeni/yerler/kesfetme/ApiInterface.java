@@ -31,4 +31,17 @@ public interface ApiInterface {
     Call<dataInfo>  deleteTur(
             @Field("idTur") int idTur,
             @Field("turResim") String turResim);
+
+
+    @FormUrlEncoded
+    @POST("update.php")
+    Call<dataInfo> updateData(
+
+            @Field("idTur") int idTur,
+            @Field("turAd") String turAd,
+            @Field("turDetay") String turDetay,
+            @Field("turResim") String turResim,
+            @Field("tur") String tur,
+            @Field("turDurum") String turDurum
+    );
 }

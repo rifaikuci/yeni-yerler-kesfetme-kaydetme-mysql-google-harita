@@ -26,10 +26,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -46,6 +48,7 @@ public class data_add extends AppCompatActivity  {
     ImageView imageSelect, locationIcon;
     TextInputLayout layoutTurAdi, layoutTurDetayi, layoutKonum;
     TextInputEditText editTextTurAdi, editTextTurDetayi, editTextKonum;
+    TextView txtBaslik;
     RadioGroup groupTur, groupGonder;
     RadioButton radioBitki, radioKus, radioAktif, radioPasif;
     Button btnKaydet, btnVazgec;
@@ -53,9 +56,15 @@ public class data_add extends AppCompatActivity  {
     LocationListener locationListener;
     ProgressDialog progressDialog;
     ApiInterface apiInterface;
-    String turAd;
+    String turAd,gelen,gelenId,turDetay,turResim;
+    String baslik,resim,detay,turDurum,tur;
+    Double enlem,boylam,turEnlem,turBoylam;
     Uri resultUri;
     private Bitmap bitmap;
+    Intent intent;
+    int radioTurId,radioGonderId,idTur;
+    RadioButton rbTur,rbGonder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +72,56 @@ public class data_add extends AppCompatActivity  {
         setContentView(R.layout.activity_data_add);
         transparanEkran();
         variableDesc();
+
+        intent = getIntent();
+        try{
+            gelen = intent.getStringExtra("gelis");
+            gelenId=intent.getStringExtra("guncelleId");
+            idTur = MapsActivity.data.get(Integer.parseInt(gelenId)).getIdTur();
+
+            System.out.println("Sayısal değerler"+ idTur);
+
+            if(gelen.equalsIgnoreCase("edit")){
+
+                baslik = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurAd();
+                resim = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurResim();
+                detay= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDetay();
+                enlem= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurEnlem();
+                boylam= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurBoylam();
+                String tur =MapsActivity.data.get(Integer.parseInt(gelenId)).getTur();
+                String turDurum =MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDurum();
+                txtBaslik.setText("Güncelleme Formu");
+                btnKaydet.setText("Güncelle");
+                Picasso.get().load(resim).into(imageSelect);
+                editTextTurDetayi.setText(detay);
+                editTextTurAdi.setText(baslik);
+                locationIcon.setVisibility(View.INVISIBLE);
+                layoutKonum.setVisibility(View.INVISIBLE);
+               // editTextKonum.setText("Enlem: "+ enlem+"\n"+"Boylam: "+boylam);
+
+               if(tur.equalsIgnoreCase("Bitki")){
+                   groupTur.check(R.id.radioBitki);
+               }else
+               {
+                   groupTur.check(R.id.radioKus);
+               }
+
+
+                if(turDurum.equalsIgnoreCase("Aktif")){
+                groupGonder.check(R.id.radioAktif);
+                }else
+                {
+                    groupGonder.check(R.id.radioPasif);
+                }
+
+
+
+
+
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
@@ -121,22 +180,43 @@ public class data_add extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 turAd =editTextTurAdi.getText().toString().trim();
-                String turDetay = editTextTurDetayi.getText().toString().trim();
-                String turResim =imageToString();
-                Double turEnlem = MapsActivity.lat;
-                Double turBoylam= MapsActivity.log;
+                 turDetay = editTextTurDetayi.getText().toString().trim();
+                 turResim =imageToString();
 
-                int radioTurId = groupTur.getCheckedRadioButtonId();
-                RadioButton rbTur = (RadioButton) findViewById(radioTurId);
-                String tur = rbTur.getText().toString();
+                 turEnlem = MapsActivity.lat;
+                 turBoylam= MapsActivity.log;
 
-                int radioGonderId = groupGonder.getCheckedRadioButtonId();
-                RadioButton rbGonder = (RadioButton) findViewById(radioGonderId);
-                String turDurum = rbGonder.getText().toString();
+                radioTurId = groupTur.getCheckedRadioButtonId();
+                rbTur = (RadioButton) findViewById(radioTurId);
+                tur = rbTur.getText().toString();
 
-                btnKaydetClick(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum);
+                radioGonderId = groupGonder.getCheckedRadioButtonId();
+                rbGonder = (RadioButton) findViewById(radioGonderId);
+                turDurum = rbGonder.getText().toString();
+
+                if(btnKaydet.getText().equals("Kaydet"))
+                {
+                    btnKaydetClick(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum);
+
+                }else
+                {
+                    System.out.println("Güncelleme işlemleri");
+                    btnUpdateClick();
+                }
+                /*
+
+
+
+
+
+*/
             }
-        });
+
+
+        }
+
+        );
+
 
         locationIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,6 +225,39 @@ public class data_add extends AppCompatActivity  {
             }
         });
 
+    }
+
+    private void btnUpdateClick() {
+        progressDialog.show();
+
+        apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<dataInfo> call= apiInterface.updateData(idTur,turAd,turDetay,turResim,tur,turDurum);
+
+        call.enqueue(new Callback<dataInfo>() {
+            @Override
+            public void onResponse( @NonNull  Call<dataInfo> call,@NonNull Response<dataInfo> response) {
+                progressDialog.dismiss();
+                if( response.isSuccessful() && response.body() !=null){
+                    Boolean success  = response.body().getSuccess();
+
+                    if(success){
+                        Toast.makeText(getApplicationContext(),turAd+ " Başarılı bir Şekilde Kaydedildi",Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+                        startActivity(intent);
+
+                    }else {
+                        Toast.makeText(getApplicationContext(),"Kayıt eklenirken bir hata oluştu.",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull  Call<dataInfo> call, @NonNull Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
 
@@ -205,6 +318,8 @@ public class data_add extends AppCompatActivity  {
         editTextTurAdi = (TextInputEditText) findViewById(R.id.editTextTurAdi);
         editTextTurDetayi = (TextInputEditText) findViewById(R.id.editTextTurDetayi);
         editTextKonum = (TextInputEditText) findViewById(R.id.editTextKonum);
+
+        txtBaslik = (TextView) findViewById(R.id.txtBaslik);
 
         groupTur = (RadioGroup) findViewById(R.id.groupTur);
         groupGonder = (RadioGroup) findViewById(R.id.groupGonder);
