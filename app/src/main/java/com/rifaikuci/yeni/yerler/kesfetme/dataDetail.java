@@ -66,7 +66,7 @@ public class dataDetail extends AppCompatActivity {
         }else
         {
 
-            delete.setVisibility(View.INVISIBLE);
+            delete.setVisibility(View.INVISIBLE);//
             edit.setVisibility(View.INVISIBLE);
         }
         try {
