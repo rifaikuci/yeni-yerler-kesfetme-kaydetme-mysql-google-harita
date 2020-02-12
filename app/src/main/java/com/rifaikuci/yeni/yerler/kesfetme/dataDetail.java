@@ -176,7 +176,7 @@ public class dataDetail extends AppCompatActivity {
     private void editClick() {
 
         Intent intent = new Intent(getApplicationContext(), data_add.class);
-        intent.putExtra("gelis","edit");
+        intent.putExtra("glis","edit");
         intent.putExtra("guncelleId",gelenId);
 
 
