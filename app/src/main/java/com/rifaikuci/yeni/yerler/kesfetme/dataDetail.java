@@ -2,6 +2,9 @@ package com.rifaikuci.yeni.yerler.kesfetme;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +19,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class dataDetail extends AppCompatActivity {
 
     TextView txtBack, txtBaslik,txtDetail;
@@ -23,20 +30,25 @@ public class dataDetail extends AppCompatActivity {
     boolean sesDurumu=false;
     TextToSpeech textToSpeech;
     Intent intent;
-    int id;
+    int idTur;
+
+    ProgressDialog progressDialog;
+    ApiInterface apiInterface;
+    String gelenId,baslik,resim,detay,turResim,turResimYol,tarihDuzenli;
+    String[] gecici;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_detail);
         transparanEkran();
+
         variableDesc();
+
 
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { txtBackClick(); }});
-
-
 
         textToSpeech=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
@@ -47,21 +59,27 @@ public class dataDetail extends AppCompatActivity {
                 }
             }
         });
+        gelenId=intent.getStringExtra("tur");
+        if(MapsActivity.data.get(Integer.parseInt(gelenId)).getIdKullanici()==MapsActivity.idKullanici){
+            delete.setVisibility(View.VISIBLE);
+            edit.setVisibility(View.VISIBLE);
+        }else
+        {
 
-
-        String gelenId=intent.getStringExtra("tur");
-
-
+            delete.setVisibility(View.INVISIBLE);
+            edit.setVisibility(View.INVISIBLE);
+        }
         try {
 
-            String baslik = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurAd();
-            String resim= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurResim();
-            String detay= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDetay();
+            baslik = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurAd();
+            resim = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurResim();
+            detay= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDetay();
 
-            String tarihDuzenli=  tarih(MapsActivity.data.get(Integer.parseInt(gelenId)).getTurKayitTarih());
+            tarihDuzenli=  tarih(MapsActivity.data.get(Integer.parseInt(gelenId)).getTurKayitTarih());
             txtBaslik.setText(baslik);
             Picasso.get().load(resim).into(image);
             txtDetail.setText("Kayıt Tarihi : " + tarihDuzenli + " \n"+ detay);
+
         }catch (Exception e ){
             System.out.println(e.toString());
         }
@@ -90,8 +108,70 @@ public class dataDetail extends AppCompatActivity {
     }
 
     private void deleteClick() {
-        Toast.makeText(getApplicationContext(),"Silme işlemleri yapılacak",Toast.LENGTH_LONG).show();
+
+       // progressDialog.show();
+        apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
+
+         idTur = MapsActivity.data.get(Integer.parseInt(gelenId)).getIdTur();
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(dataDetail.this);
+        builder.setTitle("Uyarı");
+        builder.setMessage(baslik+" Türünü silmek istediğinizden emin misiniz? ");
+
+        builder.setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        progressDialog.show();
+                        turResim = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurResim();
+                        gecici =turResim.split("/");
+                        turResimYol= gecici[gecici.length-1];
+
+                        Call<dataInfo> call= apiInterface.deleteTur(idTur,turResimYol);
+
+                        call.enqueue(new Callback<dataInfo>() {
+                            @Override
+                            public void onResponse(Call<dataInfo> call, Response<dataInfo> response) {
+                                progressDialog.dismiss();
+
+                                if( response.isSuccessful() && response.body() !=null){
+
+
+                                    Boolean success = response.body().getSuccess();
+                                    if(success){
+                                        Toast.makeText(getApplicationContext(),baslik+" Silme işlemi tamamlandı",Toast.LENGTH_SHORT).show();
+
+                                        txtBackClick();
+
+                                    }else{
+                                        Toast.makeText(getApplicationContext(),baslik+" Silerken bir hata oluştu",Toast.LENGTH_SHORT).show();
+                                    }
+                                } }
+
+
+                            @Override
+                            public void onFailure(Call<dataInfo> call, Throwable t) {
+                                progressDialog.dismiss();
+                                Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+                });
+        builder.setNegativeButton("Hayır", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(),"Tür silme işlemi iptal edildi",Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        AlertDialog alert = builder.create();
+        alert.show();
+
     }
+
+
 
     private void editClick() {
 
@@ -131,6 +211,9 @@ public class dataDetail extends AppCompatActivity {
         delete     = (ImageView) findViewById(R.id.delete);
 
         intent  = getIntent();
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Yükleniyor...");
     }
     public  void  onPause() {
         super.onPause();

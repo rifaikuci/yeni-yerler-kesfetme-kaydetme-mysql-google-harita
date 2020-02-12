@@ -35,6 +35,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static java.lang.Integer.parseInt;
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -50,6 +52,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ApiInterface apiInterface ;
     static  Marker gecici;
     ArrayList<Marker> bitkiler,kuslar;
+    static int idKullanici=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +115,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
 
-
-
-
         btnPlant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { btnPlantClick() ; } });
@@ -174,6 +174,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                Intent intent = new Intent(getApplicationContext(), dataDetail.class);
                intent.putExtra("tur",marker.getId().substring(1));
+
+
                startActivity(intent);
 
            }
