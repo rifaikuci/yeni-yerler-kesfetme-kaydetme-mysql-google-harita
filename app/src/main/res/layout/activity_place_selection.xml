@@ -17,7 +17,7 @@
         android:layout_marginTop="2dp"
         android:layout_marginEnd="2dp"
         android:layout_marginRight="2dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginBottom="0dp"
         android:background="#f27281"
         android:gravity="center|bottom"
         android:paddingTop="40dp"
@@ -46,21 +46,22 @@
 
         android:textStyle="bold"
          />
+
+
     <ListView
         android:id="@+id/listPlace"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/btnRota"
-        android:layout_marginLeft="5dp"
-        android:layout_below="@+id/txtBasliklar"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="1dp"
+        android:layout_below="@+id/search"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginBottom="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <Button
         android:id="@+id/btnRota"
@@ -86,6 +87,29 @@
         android:textIsSelectable="true"
         android:textSize="18sp" />
 
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtBasliklar"
+        android:layout_marginTop="0dp"
+        android:layout_marginLeft="1dp"
+        android:layout_marginRight="1dp"
+        android:layout_marginBottom="0dp"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:drawableStart="@drawable/search"
+        android:textColorHint="#f27281"
+        android:padding="1dp"
+        android:textAlignment="center"
+        android:background="@color/faded"
+        android:paddingBottom="2dp"
+        android:paddingRight="2dp"
+        android:paddingLeft="2dp"
+        android:paddingTop="2dp"
+        android:textColor="#345D7E"
+        android:hint="Türü bulunuz..."
+        android:drawableLeft="@drawable/search" />
 
 
 </RelativeLayout>

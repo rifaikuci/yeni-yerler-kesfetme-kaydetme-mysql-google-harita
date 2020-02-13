@@ -41,18 +41,23 @@ import static java.lang.Integer.parseInt;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+
     FloatingActionButton btnPlant,btnBird,btnPlaceAdd,btnPlaceSelect;
-    boolean birdState  = false;
-    boolean plantState = false;
+
+    boolean birdState  = false,plantState = false;
+
     static ArrayList<dataInfo> data ;
+
     LocationManager locationManager;
     LocationListener locationListener;
+
     public static double lat,log;
     ProgressDialog progressDialog;
     ApiInterface apiInterface ;
     static  Marker gecici;
     ArrayList<Marker> bitkiler,kuslar;
     static int idKullanici=0;
+    String turDetay ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,31 +83,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     for (int i =0;i<data.size();i++){
 
-
+                        if(data.get(i).getTurDetay().toString().length()>25)
+                        {
+                            turDetay = data.get(i).getTurDetay().substring(0,25);
+                        }
+                        else {
+                            turDetay = data.get(i).getTurDetay();
+                        }
 
                         if(data.get(i).getTur().equalsIgnoreCase("Bitki")) {
-                           try {
 
                                gecici = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
                                        .title(data.get(i).getTurAd())
                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.leaf))
-                                       .snippet(data.get(i).getTurDetay().substring(0, 5)).visible(false));
+                                       .snippet(turDetay).visible(false));
 
                                bitkiler.add(gecici);
 
-                           }catch (Exception e){ e.printStackTrace(); } }else
-                        {
-                            try {
+
+                        }
+                        else {
+
 
                                 Marker gedici = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
                                         .title(data.get(i).getTurAd())
                                         .icon(BitmapDescriptorFactory.fromResource(R.drawable.dove))
-                                        .snippet(data.get(i).getTurDetay().substring(0, 5)).visible(false));
+                                        .snippet(turDetay).visible(false));
 
                                 kuslar.add(gedici);
 
-                            }catch (Exception e){ e.printStackTrace(); } } } }
-            }
+                             } } } }
 
 
 

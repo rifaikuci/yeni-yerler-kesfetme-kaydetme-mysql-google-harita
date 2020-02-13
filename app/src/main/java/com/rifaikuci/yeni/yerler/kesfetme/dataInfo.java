@@ -74,23 +74,7 @@ public class dataInfo {
         isSelected = true;
     }
 
-    public boolean isSelected() { return isSelected; }
 
-    public void setSelected(boolean selected) {
-        isSelected = selected;
-    }
-
-    public int getIdTur() {
-        return idTur;
-    }
-
-    public void setIdTur(int idTur) {
-        this.idTur = idTur;
-    }
-
-    public String getTurAd() {
-        return turAd;
-    }
 
     public dataInfo(int idTur,String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, boolean isSelected,int idKullanici) {
         this.turAd = turAd;
@@ -162,5 +146,23 @@ public class dataInfo {
 
     public void setIdKullanici(int idKullanici) {
         this.idKullanici = idKullanici;
+    }
+
+    public boolean isSelected() { return isSelected; }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
+    }
+
+    public int getIdTur() {
+        return idTur;
+    }
+
+    public void setIdTur(int idTur) {
+        this.idTur = idTur;
+    }
+
+    public String getTurAd() {
+        return turAd;
     }
 }

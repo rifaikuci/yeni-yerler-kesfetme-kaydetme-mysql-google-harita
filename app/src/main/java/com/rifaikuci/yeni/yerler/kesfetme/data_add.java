@@ -50,20 +50,23 @@ public class data_add extends AppCompatActivity  {
     TextInputEditText editTextTurAdi, editTextTurDetayi, editTextKonum;
     TextView txtBaslik;
     RadioGroup groupTur, groupGonder;
-    RadioButton radioBitki, radioKus, radioAktif, radioPasif;
+    RadioButton radioBitki, radioKus, radioAktif, radioPasif,rbTur,rbGonder;
     Button btnKaydet, btnVazgec;
+
     LocationManager locationManager;
     LocationListener locationListener;
+
     ProgressDialog progressDialog;
     ApiInterface apiInterface;
-    String turAd,gelen,gelenId,turDetay,turResim;
-    String baslik,resim,detay,turDurum,tur;
+
+    String turAd,gelen,gelenId,turDetay,turResim,baslik,resim,detay,turDurum,tur;
     Double enlem,boylam,turEnlem,turBoylam;
+
     Uri resultUri;
     private Bitmap bitmap;
     Intent intent;
     int radioTurId,radioGonderId,idTur;
-    RadioButton rbTur,rbGonder;
+
 
 
     @Override
@@ -83,55 +86,44 @@ public class data_add extends AppCompatActivity  {
 
             if(gelen.equalsIgnoreCase("edit")){
 
-                baslik = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurAd();
-                resim = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurResim();
-                detay= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDetay();
-                enlem= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurEnlem();
-                boylam= MapsActivity.data.get(Integer.parseInt(gelenId)).getTurBoylam();
-                String tur =MapsActivity.data.get(Integer.parseInt(gelenId)).getTur();
-                String turDurum =MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDurum();
+                baslik =  MapsActivity.data.get(Integer.parseInt(gelenId)).getTurAd();
+                resim =   MapsActivity.data.get(Integer.parseInt(gelenId)).getTurResim();
+                detay=    MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDetay();
+                enlem=    MapsActivity.data.get(Integer.parseInt(gelenId)).getTurEnlem();
+                boylam=   MapsActivity.data.get(Integer.parseInt(gelenId)).getTurBoylam();
+                tur      =MapsActivity.data.get(Integer.parseInt(gelenId)).getTur();
+                turDurum =MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDurum();
+
                 txtBaslik.setText("Güncelleme Formu");
                 btnKaydet.setText("Güncelle");
+
                 Picasso.get().load(resim).into(imageSelect);
                 editTextTurDetayi.setText(detay);
                 editTextTurAdi.setText(baslik);
+                // editTextKonum.setText("Enlem: "+ enlem+"\n"+"Boylam: "+boylam);
+
                 locationIcon.setVisibility(View.INVISIBLE);
                 layoutKonum.setVisibility(View.INVISIBLE);
-               // editTextKonum.setText("Enlem: "+ enlem+"\n"+"Boylam: "+boylam);
-
-               if(tur.equalsIgnoreCase("Bitki")){
-                   groupTur.check(R.id.radioBitki);
-               }else
-               {
-                   groupTur.check(R.id.radioKus);
-               }
 
 
-                if(turDurum.equalsIgnoreCase("Aktif")){
-                groupGonder.check(R.id.radioAktif);
-                }else
-                {
-                    groupGonder.check(R.id.radioPasif);
-                }
+                if(tur.equalsIgnoreCase("Bitki")){ groupTur.check(R.id.radioBitki); }
+                else { groupTur.check(R.id.radioKus); }
 
 
+                if(turDurum.equalsIgnoreCase("Aktif")){ groupGonder.check(R.id.radioAktif); }
+                else { groupGonder.check(R.id.radioPasif); } }
 
-
-
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        }catch (Exception e){ e.printStackTrace(); }
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
 
+            //Konum değiştiğinde yapılacak işlemler.
             @Override
             public void onLocationChanged(Location location) {
                 MapsActivity.lat = location.getLatitude();
                 MapsActivity.log = location.getLongitude();
                 layoutKonum.getEditText().setText("Enlem :"+MapsActivity.lat+"\nBoylam :"+MapsActivity.log);
-
             }
 
             @Override
@@ -139,21 +131,27 @@ public class data_add extends AppCompatActivity  {
 
             }
 
+            //Konum açıkken yapılacak işelmler
             @Override
             public void onProviderEnabled(String provider) {
                 Toast.makeText(getApplicationContext(),"Konum Açık",Toast.LENGTH_LONG).show();
             }
 
+
+            //Konum açıkken yapılacak işelmler
             @Override
             public void onProviderDisabled(String provider) {
                 Toast.makeText(getApplicationContext(),"Konum Açık Olmalı!",Toast.LENGTH_LONG).show();
             }
         };
+
+        // konum izin işlemleri
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},101);
         }else{
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener);
 
+            //bilinen son konumu aldırma
             Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if(lastLocation!= null){
                 MapsActivity.lat = lastLocation.getLatitude();
@@ -179,60 +177,83 @@ public class data_add extends AppCompatActivity  {
         btnKaydet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                turAd =editTextTurAdi.getText().toString().trim();
+
+                 turAd =editTextTurAdi.getText().toString().trim();
                  turDetay = editTextTurDetayi.getText().toString().trim();
-                 turResim =imageToString();
+
+                 //Resmi yazıya çevirme
+                 try{ turResim =imageToString(); }
+                 catch (Exception e){ turResim =""; }
 
                  turEnlem = MapsActivity.lat;
                  turBoylam= MapsActivity.log;
 
-                radioTurId = groupTur.getCheckedRadioButtonId();
+                 radioTurId = groupTur.getCheckedRadioButtonId();
                 rbTur = (RadioButton) findViewById(radioTurId);
-                tur = rbTur.getText().toString();
 
-                radioGonderId = groupGonder.getCheckedRadioButtonId();
+                 try { tur = rbTur.getText().toString(); }
+                 catch (Exception e){ tur=""; }
+
+                 radioGonderId = groupGonder.getCheckedRadioButtonId();
                 rbGonder = (RadioButton) findViewById(radioGonderId);
-                turDurum = rbGonder.getText().toString();
 
+
+                try { turDurum = rbGonder.getText().toString(); }
+                 catch (Exception e){ turDurum=""; }
+
+                 //gelen veri kaydetme mi , güncelleme mi ?
                 if(btnKaydet.getText().equals("Kaydet"))
                 {
-                    btnKaydetClick(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum);
+
+                //Kontroller
+                    if(turAd.isEmpty()){ layoutTurAdi.setError("Tür adı boş geçilemez!!!"); }
+
+                    else if(turDetay.isEmpty()){ layoutTurDetayi.setError("Türün Detayı boş geçilemez!!!"); }
+
+                    else if(editTextKonum.getText().toString().trim().isEmpty()){ layoutKonum.setError("Türün Detayı boş geçilemez!!!"); }
+
+                    else if(turResim.equalsIgnoreCase("")==true){ Toast.makeText(getApplicationContext(),"Resim Seçilmedi!!!",Toast.LENGTH_SHORT).show(); }
+
+                    else if(tur.equalsIgnoreCase("")==true){ Toast.makeText(getApplicationContext(),"Kaydedilen verinin türü seçilmedi!!!",Toast.LENGTH_SHORT).show(); }
+
+                    else if(turDurum.equalsIgnoreCase("")==true){ Toast.makeText(getApplicationContext(),"Türün Durumu Seçilmedi!!!",Toast.LENGTH_SHORT).show(); }
+
+                    else{ btnKaydetClick(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum); }
 
                 }else
                 {
-                    System.out.println("Güncelleme işlemleri");
-                    btnUpdateClick();
-                }
-                /*
 
+                    if(turAd.isEmpty()){ layoutTurAdi.setError("Tür adı boş geçilemez!!!"); }
 
+                    else if(turDetay.isEmpty()){ layoutTurDetayi.setError("Türün Detayı boş geçilemez!!!"); }
 
+                    else if(turResim.equalsIgnoreCase("")==true){
+                        turResim="";
+                        btnUpdateClick();
+                    }
 
+                    else { btnUpdateClick(); }
 
-*/
-            }
+                    //btnKaydet bitis
+                } }});
 
-
-        }
-
-        );
-
-
+        //Location ikona tıklanırsa
         locationIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 locationIconClick();
             }
         });
-
     }
 
     private void btnUpdateClick() {
+
         progressDialog.show();
 
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
         Call<dataInfo> call= apiInterface.updateData(idTur,turAd,turDetay,turResim,tur,turDurum);
 
+        //güncelleme işlemleri
         call.enqueue(new Callback<dataInfo>() {
             @Override
             public void onResponse( @NonNull  Call<dataInfo> call,@NonNull Response<dataInfo> response) {
@@ -241,12 +262,11 @@ public class data_add extends AppCompatActivity  {
                     Boolean success  = response.body().getSuccess();
 
                     if(success){
-                        Toast.makeText(getApplicationContext(),turAd+ " Başarılı bir Şekilde Kaydedildi",Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                        startActivity(intent);
+                        Toast.makeText(getApplicationContext(),turAd+ " Başarılı bir Şekilde Güncellendi",Toast.LENGTH_SHORT).show();
+                        btnVazgecClick();
 
                     }else {
-                        Toast.makeText(getApplicationContext(),"Kayıt eklenirken bir hata oluştu.",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"Güncelleme işlemi yapılırken bir hata oluştu.",Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -274,6 +294,7 @@ public class data_add extends AppCompatActivity  {
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
         Call<dataInfo> call= apiInterface.saveData(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum);
 
+        //Kaydetme işlemleri
         call.enqueue(new Callback<dataInfo>() {
             @Override
         public void onResponse( @NonNull  Call<dataInfo> call,@NonNull Response<dataInfo> response) {
@@ -283,8 +304,7 @@ public class data_add extends AppCompatActivity  {
 
                 if(success){
                     Toast.makeText(getApplicationContext(),turAd+ " Başarılı bir Şekilde Kaydedildi",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
-                    startActivity(intent);
+                    btnVazgecClick();
 
                 }else {
                     Toast.makeText(getApplicationContext(),"Kayıt eklenirken bir hata oluştu.",Toast.LENGTH_SHORT).show();
@@ -334,6 +354,8 @@ public class data_add extends AppCompatActivity  {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Lütfen Bekleyiniz...");
+
+
     }
 
     //Crop İmage İşlemleri
@@ -343,8 +365,10 @@ public class data_add extends AppCompatActivity  {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
+
                 resultUri = result.getUri();
                 imageSelect.setImageURI(resultUri);
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
@@ -392,7 +416,7 @@ private String imageToString(){
 
     //Resmi yazıya çevirme sunucuya post etme
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream);
         byte[] imgByte = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(imgByte,Base64.DEFAULT);
 }

@@ -9,7 +9,10 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 public interface ApiInterface {
-//   public dataInfo(String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String turDurum) {
+
+
+    //Post işlemi yapıldı, POST işlemi save.php dosyasına yapıldı,
+    // post edilecek veriler parametre olarak gönderilir.
     @FormUrlEncoded
     @POST("save.php")
     Call<dataInfo> saveData(
@@ -22,10 +25,11 @@ public interface ApiInterface {
             @Field("turDurum") String turDurum
             );
 
-
+    // Get işlemleri
     @GET("turler.php")
     Call<List<dataInfo>> getTurler();
 
+    //delete işlemleri
     @FormUrlEncoded
     @POST("deleteTur.php")
     Call<dataInfo>  deleteTur(
@@ -33,10 +37,11 @@ public interface ApiInterface {
             @Field("turResim") String turResim);
 
 
+
+    // update işlemleri
     @FormUrlEncoded
     @POST("update.php")
     Call<dataInfo> updateData(
-
             @Field("idTur") int idTur,
             @Field("turAd") String turAd,
             @Field("turDetay") String turDetay,

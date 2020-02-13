@@ -42,9 +42,7 @@ public class dataDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_detail);
         transparanEkran();
-
         variableDesc();
-
 
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,13 +57,14 @@ public class dataDetail extends AppCompatActivity {
                 }
             }
         });
+
         gelenId=intent.getStringExtra("tur");
+
         if(MapsActivity.data.get(Integer.parseInt(gelenId)).getIdKullanici()==MapsActivity.idKullanici){
             delete.setVisibility(View.VISIBLE);
             edit.setVisibility(View.VISIBLE);
-        }else
-        {
-
+        }
+        else {
             delete.setVisibility(View.INVISIBLE);//
             edit.setVisibility(View.INVISIBLE);
         }
@@ -80,9 +79,8 @@ public class dataDetail extends AppCompatActivity {
             Picasso.get().load(resim).into(image);
             txtDetail.setText("Kayıt Tarihi : " + tarihDuzenli + " \n"+ detay);
 
-        }catch (Exception e ){
-            System.out.println(e.toString());
         }
+        catch (Exception e ){ System.out.println(e.toString()); }
 
         volume.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -171,30 +169,23 @@ public class dataDetail extends AppCompatActivity {
 
     }
 
-
-
     private void editClick() {
 
         Intent intent = new Intent(getApplicationContext(), data_add.class);
-        intent.putExtra("glis","edit");
+        intent.putExtra("gelis","edit");
         intent.putExtra("guncelleId",gelenId);
 
-
         startActivity(intent);
-        Toast.makeText(getApplicationContext(),"Düzenleme işlemleri yapılacak",Toast.LENGTH_LONG).show();
     }
 
     private void volumeClick() {
-        if(sesDurumu==false)
-        {
+        if(sesDurumu==false) {
             sesDurumu=true;
             volume.setImageResource(R.drawable.ic_volume_up_black_24dp);
 
             textToSpeech.speak(txtBaslik.getText()+" "+txtDetail.getText(),TextToSpeech.QUEUE_FLUSH,null);
-
         }
-        else
-        {
+        else {
             sesDurumu=false;
             onPause();
             volume.setImageResource(R.drawable.ic_volume_off_black_24dp);
@@ -221,6 +212,7 @@ public class dataDetail extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Yükleniyor...");
     }
+
     public  void  onPause() {
         super.onPause();
         if (textToSpeech != null) {

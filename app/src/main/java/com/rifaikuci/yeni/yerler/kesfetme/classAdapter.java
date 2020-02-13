@@ -21,9 +21,9 @@ public class classAdapter extends BaseAdapter {
     LayoutInflater inflater;
 
     public classAdapter(Activity activity, List<dataInfo> datas) {
+
         this.activity = activity;
         this.datas = datas;
-
         inflater = activity.getLayoutInflater();
 
     }
@@ -49,10 +49,10 @@ public class classAdapter extends BaseAdapter {
         ViewHolder holder = null;
 
         if (view == null) {
+
             view = inflater.inflate(R.layout.custom_view, viewGroup, false);
 
             holder = new ViewHolder();
-
             holder.basliklar = (TextView) view.findViewById(R.id.basliklar);
             holder.resimler = (ImageView) view.findViewById(R.id.resimler);
             holder.checkler = (ImageView) view.findViewById(R.id.checkler);
@@ -60,11 +60,12 @@ public class classAdapter extends BaseAdapter {
             view.setTag(holder);
 
         }
-        else { holder = (ViewHolder) view.getTag();}
+        else {
+            holder = (ViewHolder) view.getTag();}
 
             dataInfo model = datas.get(i);
             holder.basliklar.setText(model.getTurAd());
-        Picasso.get().load(datas.get(i).getTurResim()).into(holder.resimler);
+            Picasso.get().load(datas.get(i).getTurResim()).into(holder.resimler);
 
             if (model.isSelected()) {
                 holder.checkler.setBackgroundResource(R.drawable.checked);
