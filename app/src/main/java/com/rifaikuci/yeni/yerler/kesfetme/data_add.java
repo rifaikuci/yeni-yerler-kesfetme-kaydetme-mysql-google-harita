@@ -325,6 +325,7 @@ public class data_add extends AppCompatActivity  {
     private void btnVazgecClick() {
         Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void variableDesc() {
