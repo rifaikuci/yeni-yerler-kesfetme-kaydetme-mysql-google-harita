@@ -4,18 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".signIn">
+    tools:context=".signUp">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="#4fb3bf"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:src="#4fb3bf" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -29,6 +25,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            android:id="@+id/linearBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -50,67 +47,88 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
         </LinearLayout>
-
     </LinearLayout>
 
 
     <com.github.captain_miao.optroundcardview.OptRoundCardView
-        android:id="@+id/optRoundCardView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-        app:optRoundCardBackgroundColor="#353758"
         app:optRoundCardCornerRadius="50dp"
         app:optRoundCardElevation="0dp"
         app:optRoundCardLeftBottomCorner="false"
         app:optRoundCardLeftTopCorner="true"
         app:optRoundCardRightBottomCorner="false"
-        app:optRoundCardRightTopCorner="true">
+        app:optRoundCardRightTopCorner="true"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="80dp"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:layout_marginTop="80dp">
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hoşgeldiniz "
-                    android:textAlignment="center"
-                    android:textColor="#9394B8"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:text="Yeni Hesap"
+                    android:textStyle="bold"
+                    android:textSize="25dp"
+                    android:textColor="#191919"
+                    android:layout_marginStart="30dp"/>
 
                 <EditText
-                    android:id="@+id/txtKullaniciAdi"
+                    android:id="@+id/txtName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="30dp"
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="30dp"
                     android:background="@android:color/transparent"
-                    android:hint="Kullanıcı Adı"
+                    android:drawableEnd="@drawable/user_icon"
+                    android:drawableTint="#696969"
+                    android:hint="Ad ve Soyad Giriniz"
+                    android:inputType="textPersonName"
                     android:padding="15dp"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/white"
-                    android:textStyle="bold"
-                    tools:ignore="InvalidId" />
+                    android:textColor="#191919"
+                    android:textColorHint="#696969"
+                    android:textStyle="bold" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
-                    android:background="#5A5A5A" />
+                    android:background="#696969" />
+
+                <EditText
+                    android:id="@+id/txtMail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="30dp"
+                    android:background="@android:color/transparent"
+                    android:drawableEnd="@drawable/email_icon"
+                    android:drawableTint="#696969"
+                    android:hint="Mailinizi Giriniz"
+                    android:inputType="textEmailAddress"
+                    android:padding="15dp"
+                    android:textColor="#191919"
+                    android:textColorHint="#696969"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="40dp"
+                    android:layout_marginEnd="40dp"
+                    android:background="#696969" />
 
                 <EditText
                     android:id="@+id/txtSifre"
@@ -120,12 +138,13 @@
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="30dp"
                     android:background="@android:color/transparent"
-                    android:hint="Şifre"
-
+                    android:drawableEnd="@drawable/pasword_icon"
+                    android:drawableTint="#696969"
+                    android:hint="Şifre Giriniz"
                     android:inputType="textPassword"
                     android:padding="15dp"
-                    android:textColor="@android:color/white"
-                    android:textColorHint="@android:color/white"
+                    android:textColor="#191919"
+                    android:textColorHint="#696969"
                     android:textStyle="bold" />
 
                 <RelativeLayout
@@ -133,58 +152,27 @@
                     android:layout_height="1dp"
                     android:layout_marginStart="40dp"
                     android:layout_marginEnd="40dp"
-                    android:background="#5A5A5A" />
+                    android:background="#696969" />
 
                 <Button
-                    android:id="@+id/btnGiris"
+                    android:id="@+id/btnDevam"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginEnd="30dp"
-                    android:background="@drawable/button_login_background"
-                    android:text="Giriş"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="80dp"
+                    android:layout_marginEnd="50dp"
+                    android:layout_marginBottom="80dp"
                     android:foreground="?android:attr/selectableItemBackground"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/btnYeniHesap"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="30dp"
-                    android:background="@drawable/button_another_account_background"
-                    android:elevation="0dp"
-                    android:text="Yeni Hesap"
-                    android:foreground="?android:attr/selectableItemBackground"
+                    android:background="@drawable/button_signin_background"
+                    android:text="Devam"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"
                     android:textStyle="bold" />
-
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 
     </com.github.captain_miao.optroundcardview.OptRoundCardView>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/circleImageView"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginBottom="8dp"
-        android:elevation="0dp"
-        android:src="@drawable/user_image"
-        app:layout_constraintBottom_toTopOf="@+id/optRoundCardView"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/optRoundCardView" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
