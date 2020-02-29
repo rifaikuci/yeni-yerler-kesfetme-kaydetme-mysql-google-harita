@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
+import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -59,13 +61,13 @@ public class data_add extends AppCompatActivity  {
     ProgressDialog progressDialog;
     ApiInterface apiInterface;
 
-    String turAd,gelen,gelenId,turDetay,turResim,baslik,resim,detay,turDurum,tur;
+    String turAd,gelen,gelenId,turDetay,turResim,baslik,resim,detay,durum,tur;
     Double enlem,boylam,turEnlem,turBoylam;
 
     Uri resultUri;
     private Bitmap bitmap;
     Intent intent;
-    int radioTurId,radioGonderId,idTur;
+    int radioTurId,radioGonderId,id;
 
 
 
@@ -80,9 +82,9 @@ public class data_add extends AppCompatActivity  {
         try{
             gelen = intent.getStringExtra("gelis");
             gelenId=intent.getStringExtra("guncelleId");
-            idTur = MapsActivity.data.get(Integer.parseInt(gelenId)).getIdTur();
+            id = MapsActivity.data.get(Integer.parseInt(gelenId)).getid();
 
-            System.out.println("Sayısal değerler"+ idTur);
+            System.out.println("Sayısal değerler"+ id);
 
             if(gelen.equalsIgnoreCase("edit")){
 
@@ -92,7 +94,7 @@ public class data_add extends AppCompatActivity  {
                 enlem=    MapsActivity.data.get(Integer.parseInt(gelenId)).getTurEnlem();
                 boylam=   MapsActivity.data.get(Integer.parseInt(gelenId)).getTurBoylam();
                 tur      =MapsActivity.data.get(Integer.parseInt(gelenId)).getTur();
-                turDurum =MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDurum();
+                durum =MapsActivity.data.get(Integer.parseInt(gelenId)).getdurum();
 
                 txtBaslik.setText("Güncelleme Formu");
                 btnKaydet.setText("Güncelle");
@@ -110,7 +112,7 @@ public class data_add extends AppCompatActivity  {
                 else { groupTur.check(R.id.radioKus); }
 
 
-                if(turDurum.equalsIgnoreCase("Aktif")){ groupGonder.check(R.id.radioAktif); }
+                if(durum.equalsIgnoreCase("1")){ groupGonder.check(R.id.radioAktif); }
                 else { groupGonder.check(R.id.radioPasif); } }
 
         }catch (Exception e){ e.printStackTrace(); }
@@ -198,8 +200,8 @@ public class data_add extends AppCompatActivity  {
                 rbGonder = (RadioButton) findViewById(radioGonderId);
 
 
-                try { turDurum = rbGonder.getText().toString(); }
-                 catch (Exception e){ turDurum=""; }
+                try { durum = rbGonder.getText().toString(); }
+                 catch (Exception e){ durum=""; }
 
                  //gelen veri kaydetme mi , güncelleme mi ?
                 if(btnKaydet.getText().equals("Kaydet"))
@@ -216,9 +218,9 @@ public class data_add extends AppCompatActivity  {
 
                     else if(tur.equalsIgnoreCase("")==true){ Toast.makeText(getApplicationContext(),"Kaydedilen verinin türü seçilmedi!!!",Toast.LENGTH_SHORT).show(); }
 
-                    else if(turDurum.equalsIgnoreCase("")==true){ Toast.makeText(getApplicationContext(),"Türün Durumu Seçilmedi!!!",Toast.LENGTH_SHORT).show(); }
+                    else if(durum.equalsIgnoreCase("")==true){ Toast.makeText(getApplicationContext(),"Türün Durumu Seçilmedi!!!",Toast.LENGTH_SHORT).show(); }
 
-                    else{ btnKaydetClick(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum); }
+                    else{ btnKaydetClick(turAd,turDetay,turResim,turEnlem,turBoylam,tur,durum); }
 
                 }else
                 {
@@ -251,7 +253,7 @@ public class data_add extends AppCompatActivity  {
         progressDialog.show();
 
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<dataInfo> call= apiInterface.updateData(idTur,turAd,turDetay,turResim,tur,turDurum);
+        Call<dataInfo> call= apiInterface.updateData(id,turAd,turDetay,turResim,tur,durum);
 
         //güncelleme işlemleri
         call.enqueue(new Callback<dataInfo>() {
@@ -288,11 +290,11 @@ public class data_add extends AppCompatActivity  {
     }
 
     //Kaydetme işlemleri
-    private void btnKaydetClick(final String turAd,final String turDetay,final String turResim, final Double turEnlem,final Double turBoylam,final String tur,final String turDurum) {
+    private void btnKaydetClick(final String turAd,final String turDetay,final String turResim, final Double turEnlem,final Double turBoylam,final String tur,final String durum) {
         progressDialog.show();
 
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<dataInfo> call= apiInterface.saveData(turAd,turDetay,turResim,turEnlem,turBoylam,tur,turDurum);
+        Call<dataInfo> call= apiInterface.saveData(turAd,turDetay,turResim,turEnlem,turBoylam,tur,durum);
 
         //Kaydetme işlemleri
         call.enqueue(new Callback<dataInfo>() {

@@ -10,7 +10,7 @@ import static java.lang.Boolean.FALSE;
 
 public class dataInfo {
     @Expose
-    @SerializedName("idTur") private int idTur;
+    @SerializedName("id") private int id;
     @Expose
     @SerializedName("turAd") private String turAd;
     @Expose
@@ -24,7 +24,7 @@ public class dataInfo {
     @Expose
     @SerializedName("tur") private String tur;
     @Expose
-    @SerializedName("turDurum") private String turDurum;
+    @SerializedName("durum") private String durum;
 
     public String getTurKayitTarih() {
         return turKayitTarih;
@@ -51,19 +51,19 @@ public class dataInfo {
         this.success = success;
     }
 
-    public dataInfo(String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String turDurum) {
+    public dataInfo(String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String durum) {
         this.turAd = turAd;
         this.turDetay = turDetay;
         this.turResim = turResim;
         this.turEnlem = turEnlem;
         this.turBoylam = turBoylam;
         this.tur = tur;
-        this.turDurum = turDurum;
+        this.durum = durum;
         this.isSelected =true;
     }
 
-    public dataInfo(int idTur, String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String turKayitTarih,boolean isSelected) {
-        this.idTur = idTur;
+    public dataInfo(int id, String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String turKayitTarih,boolean isSelected) {
+        this.id = id;
         this.turAd = turAd;
         this.turDetay = turDetay;
         this.turResim = turResim;
@@ -76,7 +76,7 @@ public class dataInfo {
 
 
 
-    public dataInfo(int idTur,String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, boolean isSelected,int idKullanici) {
+    public dataInfo(int id,String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, boolean isSelected,int idKullanici) {
         this.turAd = turAd;
         this.turDetay = turDetay;
         this.turResim = turResim;
@@ -84,7 +84,7 @@ public class dataInfo {
         this.turBoylam = turBoylam;
         this.tur = tur;
         this.isSelected = isSelected;
-        this.idTur =idTur;
+        this.id =id;
         this.idKullanici=idKullanici;
     }
 
@@ -132,12 +132,12 @@ public class dataInfo {
         this.tur = tur;
     }
 
-    public String getTurDurum() {
-        return turDurum;
+    public String getdurum() {
+        return durum;
     }
 
-    public void setTurDurum(String turDurum) {
-        this.turDurum = turDurum;
+    public void setdurum(String durum) {
+        this.durum = durum;
     }
 
     public int getIdKullanici() {
@@ -154,12 +154,12 @@ public class dataInfo {
         isSelected = selected;
     }
 
-    public int getIdTur() {
-        return idTur;
+    public int getid() {
+        return id;
     }
 
-    public void setIdTur(int idTur) {
-        this.idTur = idTur;
+    public void setid(int id) {
+        this.id = id;
     }
 
     public String getTurAd() {

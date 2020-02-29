@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
+import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -30,7 +32,7 @@ public class dataDetail extends AppCompatActivity {
     boolean sesDurumu=false;
     TextToSpeech textToSpeech;
     Intent intent;
-    int idTur;
+    int id;
 
     ProgressDialog progressDialog;
     ApiInterface apiInterface;
@@ -110,7 +112,7 @@ public class dataDetail extends AppCompatActivity {
        // progressDialog.show();
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
 
-         idTur = MapsActivity.data.get(Integer.parseInt(gelenId)).getIdTur();
+         id = MapsActivity.data.get(Integer.parseInt(gelenId)).getid();
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(dataDetail.this);
@@ -126,7 +128,7 @@ public class dataDetail extends AppCompatActivity {
                         gecici =turResim.split("/");
                         turResimYol= gecici[gecici.length-1];
 
-                        Call<dataInfo> call= apiInterface.deleteTur(idTur,turResimYol);
+                        Call<dataInfo> call= apiInterface.deleteTur(id,turResimYol);
 
                         call.enqueue(new Callback<dataInfo>() {
                             @Override

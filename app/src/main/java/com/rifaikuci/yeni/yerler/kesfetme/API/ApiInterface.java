@@ -1,4 +1,6 @@
-package com.rifaikuci.yeni.yerler.kesfetme;
+package com.rifaikuci.yeni.yerler.kesfetme.API;
+
+import com.rifaikuci.yeni.yerler.kesfetme.dataInfo;
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ public interface ApiInterface {
             @Field("turEnlem") Double turEnlem,
             @Field("turBoylam") Double turBoylam,
             @Field("tur") String tur,
-            @Field("turDurum") String turDurum
+            @Field("durum") String durum
             );
 
     // Get işlemleri
@@ -33,7 +35,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("deleteTur.php")
     Call<dataInfo>  deleteTur(
-            @Field("idTur") int idTur,
+            @Field("id") int id,
             @Field("turResim") String turResim);
 
 
@@ -42,11 +44,11 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("update.php")
     Call<dataInfo> updateData(
-            @Field("idTur") int idTur,
+            @Field("id") int id,
             @Field("turAd") String turAd,
             @Field("turDetay") String turDetay,
             @Field("turResim") String turResim,
             @Field("tur") String tur,
-            @Field("turDurum") String turDurum
+            @Field("durum") String durum
     );
 }
