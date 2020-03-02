@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
+import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 import com.squareup.picasso.Picasso;
 
 import java.util.Locale;
@@ -128,11 +129,11 @@ public class dataDetail extends AppCompatActivity {
                         gecici =turResim.split("/");
                         turResimYol= gecici[gecici.length-1];
 
-                        Call<dataInfo> call= apiInterface.deleteTur(id,turResimYol);
+                        Call<dataTur> call= apiInterface.deleteTur(id,turResimYol);
 
-                        call.enqueue(new Callback<dataInfo>() {
+                        call.enqueue(new Callback<dataTur>() {
                             @Override
-                            public void onResponse(Call<dataInfo> call, Response<dataInfo> response) {
+                            public void onResponse(Call<dataTur> call, Response<dataTur> response) {
                                 progressDialog.dismiss();
 
                                 if( response.isSuccessful() && response.body() !=null){
@@ -151,7 +152,7 @@ public class dataDetail extends AppCompatActivity {
 
 
                             @Override
-                            public void onFailure(Call<dataInfo> call, Throwable t) {
+                            public void onFailure(Call<dataTur> call, Throwable t) {
                                 progressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
                             }

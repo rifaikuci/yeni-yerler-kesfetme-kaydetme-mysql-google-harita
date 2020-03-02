@@ -1,4 +1,4 @@
-package com.rifaikuci.yeni.yerler.kesfetme;
+package com.rifaikuci.yeni.yerler.kesfetme.datas;
 
 import android.media.Image;
 
@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 
 import static java.lang.Boolean.FALSE;
 
-public class dataInfo {
+public class dataTur {
     @Expose
     @SerializedName("id") private int id;
     @Expose
@@ -51,7 +51,7 @@ public class dataInfo {
         this.success = success;
     }
 
-    public dataInfo(String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String durum) {
+    public dataTur(String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String durum) {
         this.turAd = turAd;
         this.turDetay = turDetay;
         this.turResim = turResim;
@@ -62,7 +62,7 @@ public class dataInfo {
         this.isSelected =true;
     }
 
-    public dataInfo(int id, String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String turKayitTarih,boolean isSelected) {
+    public dataTur(int id, String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String turKayitTarih, boolean isSelected) {
         this.id = id;
         this.turAd = turAd;
         this.turDetay = turDetay;
@@ -76,7 +76,7 @@ public class dataInfo {
 
 
 
-    public dataInfo(int id,String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, boolean isSelected,int idKullanici) {
+    public dataTur(int id, String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, boolean isSelected, int idKullanici) {
         this.turAd = turAd;
         this.turDetay = turDetay;
         this.turResim = turResim;

@@ -33,6 +33,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
+import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -253,12 +254,12 @@ public class data_add extends AppCompatActivity  {
         progressDialog.show();
 
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<dataInfo> call= apiInterface.updateData(id,turAd,turDetay,turResim,tur,durum);
+        Call<dataTur> call= apiInterface.updateData(id,turAd,turDetay,turResim,tur,durum);
 
         //güncelleme işlemleri
-        call.enqueue(new Callback<dataInfo>() {
+        call.enqueue(new Callback<dataTur>() {
             @Override
-            public void onResponse( @NonNull  Call<dataInfo> call,@NonNull Response<dataInfo> response) {
+            public void onResponse(@NonNull  Call<dataTur> call, @NonNull Response<dataTur> response) {
                 progressDialog.dismiss();
                 if( response.isSuccessful() && response.body() !=null){
                     Boolean success  = response.body().getSuccess();
@@ -274,7 +275,7 @@ public class data_add extends AppCompatActivity  {
             }
 
             @Override
-            public void onFailure(@NonNull  Call<dataInfo> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull  Call<dataTur> call, @NonNull Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
 
@@ -294,12 +295,12 @@ public class data_add extends AppCompatActivity  {
         progressDialog.show();
 
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<dataInfo> call= apiInterface.saveData(turAd,turDetay,turResim,turEnlem,turBoylam,tur,durum);
+        Call<dataTur> call= apiInterface.saveData(turAd,turDetay,turResim,turEnlem,turBoylam,tur,durum);
 
         //Kaydetme işlemleri
-        call.enqueue(new Callback<dataInfo>() {
+        call.enqueue(new Callback<dataTur>() {
             @Override
-        public void onResponse( @NonNull  Call<dataInfo> call,@NonNull Response<dataInfo> response) {
+        public void onResponse(@NonNull  Call<dataTur> call, @NonNull Response<dataTur> response) {
             progressDialog.dismiss();
             if( response.isSuccessful() && response.body() !=null){
                 Boolean success  = response.body().getSuccess();
@@ -315,7 +316,7 @@ public class data_add extends AppCompatActivity  {
         }
 
         @Override
-        public void onFailure(@NonNull  Call<dataInfo> call, @NonNull Throwable t) {
+        public void onFailure(@NonNull  Call<dataTur> call, @NonNull Throwable t) {
             progressDialog.dismiss();
             Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
 

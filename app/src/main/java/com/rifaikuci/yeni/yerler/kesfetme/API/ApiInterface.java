@@ -1,6 +1,7 @@
 package com.rifaikuci.yeni.yerler.kesfetme.API;
 
-import com.rifaikuci.yeni.yerler.kesfetme.dataInfo;
+import com.rifaikuci.yeni.yerler.kesfetme.datas.dataKullanici;
+import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface ApiInterface {
     // post edilecek veriler parametre olarak gönderilir.
     @FormUrlEncoded
     @POST("save.php")
-    Call<dataInfo> saveData(
+    Call<dataTur> saveData(
             @Field("turAd") String turAd,
             @Field("turDetay") String turDetay,
             @Field("turResim") String turResim,
@@ -29,12 +30,12 @@ public interface ApiInterface {
 
     // Get işlemleri
     @GET("turler.php")
-    Call<List<dataInfo>> getTurler();
+    Call<List<dataTur>> getTurler();
 
     //delete işlemleri
     @FormUrlEncoded
     @POST("deleteTur.php")
-    Call<dataInfo>  deleteTur(
+    Call<dataTur>  deleteTur(
             @Field("id") int id,
             @Field("turResim") String turResim);
 
@@ -43,12 +44,21 @@ public interface ApiInterface {
     // update işlemleri
     @FormUrlEncoded
     @POST("update.php")
-    Call<dataInfo> updateData(
-            @Field("id") int id,
-            @Field("turAd") String turAd,
-            @Field("turDetay") String turDetay,
-            @Field("turResim") String turResim,
-            @Field("tur") String tur,
-            @Field("durum") String durum
+    Call<dataTur> updateData(
+                    @Field("id") int id,
+                    @Field("turAd") String turAd,
+                    @Field("turDetay") String turDetay,
+                    @Field("turResim") String turResim,
+                    @Field("tur") String tur,
+                    @Field("durum") String durum
+            );
+
+
+    @FormUrlEncoded
+    @POST("kullanici_kaydet.php")
+    Call<dataKullanici> saveKullanici(
+            @Field("adSoyad") String adSoyad,
+            @Field("mail") String mail,
+            @Field("sifre") String sifre
     );
 }

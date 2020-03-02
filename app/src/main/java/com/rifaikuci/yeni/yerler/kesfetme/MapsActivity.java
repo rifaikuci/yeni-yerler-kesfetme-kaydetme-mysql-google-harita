@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
+import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     boolean birdState  = false,plantState = false;
 
-    static ArrayList<dataInfo> data ;
+    static ArrayList<dataTur> data ;
 
     LocationManager locationManager;
     LocationListener locationListener;
@@ -71,16 +72,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // get komutu ile verilerimizi getirildi.
         apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<dataInfo>> call= apiInterface.getTurler();
+        Call<List<dataTur>> call= apiInterface.getTurler();
 
-        call.enqueue(new Callback<List<dataInfo>>() {
+        call.enqueue(new Callback<List<dataTur>>() {
             @Override
-            public void onResponse(Call<List<dataInfo>> call, Response<List<dataInfo>> response) {
+            public void onResponse(Call<List<dataTur>> call, Response<List<dataTur>> response) {
                 progressDialog.dismiss();
 
                 if( response.isSuccessful() && response.body() !=null){
 
-                    data = (ArrayList<dataInfo>) response.body();
+                    data = (ArrayList<dataTur>) response.body();
 
 
                     for (int i =0;i<data.size();i++){
@@ -119,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
             @Override
-            public void onFailure(Call<List<dataInfo>> call, Throwable t) {
+            public void onFailure(Call<List<dataTur>> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
             }

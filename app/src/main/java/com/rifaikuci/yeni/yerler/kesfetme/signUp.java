@@ -1,7 +1,9 @@
 package com.rifaikuci.yeni.yerler.kesfetme;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,14 +12,27 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
+import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
+import com.rifaikuci.yeni.yerler.kesfetme.datas.dataKullanici;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class signUp extends AppCompatActivity {
 
     EditText txtName,txtMail,txtSifre;
     Button btnDevam;
     LinearLayout linearBack;
+    ProgressDialog progressDialog;
 
-    String name, mail,sifre;
+    String adSoyad, mail,sifre;
+
+    ApiInterface apiInterface;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,39 +46,72 @@ public class signUp extends AppCompatActivity {
                 linearBackClick();
             }
         });
+
         btnDevam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnDevamClick();
+
+                adSoyad=txtName.getText().toString().trim();
+                sifre =txtSifre.getText().toString().trim();
+                mail = txtMail.getText().toString().trim();
+
+                if(adSoyad.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Ad soyad hesabı giriniz",Toast.LENGTH_SHORT).show();
+                }
+
+                else  if (sifre.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"Sifre giriniz.",Toast.LENGTH_SHORT).show();
+                }
+
+                else if(mail.isEmpty()){
+                    Toast.makeText(getApplicationContext(),"E mail hesabı giriniz",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    if(android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches())
+                        { btnDevamClick(adSoyad,sifre,mail); }
+
+                    else
+                    { Toast.makeText(getApplicationContext(),"Mail formatında değil ",Toast.LENGTH_SHORT).show(); }
+
+                }
             }
         });
     }
 
-    private void btnDevamClick() {
+    private void btnDevamClick(final String adSoyad,final String mail,final String sifre) {
 
-            name=txtName.getText().toString().trim();
-            sifre =txtSifre.getText().toString().trim();
-            mail = txtMail.getText().toString().trim();
+        progressDialog.show();
+        apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<dataKullanici> call= apiInterface.saveKullanici(adSoyad,sifre,mail);
 
-        if(name.isEmpty()){
-            System.out.println( "Ad soyad hesabı giriniz");
-        }
-        else  if (sifre.isEmpty()){
-            System.out.println("Sifre giriniz.");
-        }else if(mail.isEmpty()){
-            System.out.println( "E mail hesabı giriniz");
-        }else
-        {
-            if(android.util.Patterns.EMAIL_ADDRESS.matcher(mail).matches())
-            {
-                System.out.println("Mail formatında ");
+        call.enqueue(new Callback<dataKullanici>() {
+            @Override
+            public void onResponse(@NonNull Call<dataKullanici> call, @NonNull Response<dataKullanici> response) {
+                progressDialog.dismiss();
 
-            }else
-            {
-                System.out.println("Mail formatında değil ");
+
+                if( response.isSuccessful() && response.body() !=null){
+
+                    Boolean success  = response.body().getSuccess();
+
+                    if(success){
+                        Toast.makeText(getApplicationContext(),adSoyad+ " Başarılı bir şekilde eklendi",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(),adSoyad+" Kullanıcısı eklenirken bir hata oluştu",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<dataKullanici> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
 
             }
-        }
+
+        });
+
     }
 
     private void linearBackClick() {
@@ -80,6 +128,9 @@ public class signUp extends AppCompatActivity {
         btnDevam = (Button)   findViewById(R.id.btnDevam);
 
         linearBack = (LinearLayout) findViewById(R.id.linearBack);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Lütfen Bekleyiniz...");
      }
 
     //ekranı transpan yapar

@@ -2,12 +2,9 @@ package com.rifaikuci.yeni.yerler.kesfetme;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -17,7 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 
 import java.util.ArrayList;
 
@@ -29,7 +27,7 @@ public class placeSelection extends AppCompatActivity {
     Button btnRota;
     classAdapter adapter;
     ListView  listPlace;
-    ArrayList<dataInfo> gecici;
+    ArrayList<dataTur> gecici;
     EditText search;
 
 
@@ -45,7 +43,7 @@ public class placeSelection extends AppCompatActivity {
             @Override
             public void onClick(View v) { txtBackClick(); }});
 
-        for (dataInfo data : MapsActivity.data){ gecici.add(data); }
+        for (dataTur data : MapsActivity.data){ gecici.add(data); }
 
         adapter = new classAdapter(this, MapsActivity.data);
         listPlace.setAdapter(adapter);
@@ -62,7 +60,7 @@ public class placeSelection extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 gecici.clear();
-                for (dataInfo data : MapsActivity.data){
+                for (dataTur data : MapsActivity.data){
 
                     if(data.getTurAd().contains(search.getText().toString().trim())==true){
                         gecici.add(data);
@@ -85,7 +83,7 @@ public class placeSelection extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                dataInfo model = gecici.get(i);
+                dataTur model = gecici.get(i);
 
                 if (model.isSelected()) {
                     model.setSelected(false);
@@ -109,7 +107,7 @@ public class placeSelection extends AppCompatActivity {
 
     private void btnRotaClick() {
         int a =0;
-        for (dataInfo fe: MapsActivity.data)
+        for (dataTur fe: MapsActivity.data)
         {
             if(fe.isSelected()){
                 a++;

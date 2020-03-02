@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -17,10 +18,10 @@ import java.util.List;
 public class classAdapter extends BaseAdapter {
 
     Activity activity;
-    List<dataInfo> datas;
+    List<dataTur> datas;
     LayoutInflater inflater;
 
-    public classAdapter(Activity activity, List<dataInfo> datas) {
+    public classAdapter(Activity activity, List<dataTur> datas) {
 
         this.activity = activity;
         this.datas = datas;
@@ -63,7 +64,7 @@ public class classAdapter extends BaseAdapter {
         else {
             holder = (ViewHolder) view.getTag();}
 
-            dataInfo model = datas.get(i);
+            dataTur model = datas.get(i);
             holder.basliklar.setText(model.getTurAd());
             Picasso.get().load(datas.get(i).getTurResim()).into(holder.resimler);
 
@@ -76,7 +77,7 @@ public class classAdapter extends BaseAdapter {
             return view;
     }
 
-    public void updateRecords(List<dataInfo> datas){
+    public void updateRecords(List<dataTur> datas){
         this.datas = datas;
         notifyDataSetChanged(); }
 
