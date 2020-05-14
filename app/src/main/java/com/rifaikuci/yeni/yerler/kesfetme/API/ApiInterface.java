@@ -59,6 +59,7 @@ public interface ApiInterface {
     Call<dataKullanici> saveKullanici(
             @Field("adSoyad") String adSoyad,
             @Field("mail") String mail,
-            @Field("sifre") String sifre
+            @Field("sifre") String sifre,
+            @Field("resim") String resim
     );
 }

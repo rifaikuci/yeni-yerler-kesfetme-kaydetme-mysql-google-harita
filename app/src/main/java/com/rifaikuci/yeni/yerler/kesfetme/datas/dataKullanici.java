@@ -16,10 +16,20 @@ public class dataKullanici {
     @Expose
     @SerializedName("durum") private String durum;
     @Expose
+    @SerializedName("message") private String message;
+    @Expose
     @SerializedName("success") private boolean success = false;
 
     public boolean getSuccess() {
         return success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public void setSuccess(boolean success) {

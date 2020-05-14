@@ -192,16 +192,15 @@ public class data_add extends AppCompatActivity  {
                  turBoylam= MapsActivity.log;
 
                  radioTurId = groupTur.getCheckedRadioButtonId();
-                rbTur = (RadioButton) findViewById(radioTurId);
+                 rbTur = (RadioButton) findViewById(radioTurId);
 
                  try { tur = rbTur.getText().toString(); }
                  catch (Exception e){ tur=""; }
 
                  radioGonderId = groupGonder.getCheckedRadioButtonId();
-                rbGonder = (RadioButton) findViewById(radioGonderId);
+                 rbGonder = (RadioButton) findViewById(radioGonderId);
 
-
-                try { durum = rbGonder.getText().toString(); }
+                 try { durum = rbGonder.getText().toString(); }
                  catch (Exception e){ durum=""; }
 
                  //gelen veri kaydetme mi , güncelleme mi ?
