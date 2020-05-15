@@ -26,32 +26,32 @@ public interface ApiInterface {
             @Field("turBoylam") Double turBoylam,
             @Field("tur") String tur,
             @Field("durum") String durum
-            );
+    );
 
     // Get işlemleri
     @GET("turler.php")
     Call<List<dataTur>> getTurler();
 
+
     //delete işlemleri
     @FormUrlEncoded
     @POST("deleteTur.php")
-    Call<dataTur>  deleteTur(
+    Call<dataTur> deleteTur(
             @Field("id") int id,
             @Field("turResim") String turResim);
-
 
 
     // update işlemleri
     @FormUrlEncoded
     @POST("update.php")
     Call<dataTur> updateData(
-                    @Field("id") int id,
-                    @Field("turAd") String turAd,
-                    @Field("turDetay") String turDetay,
-                    @Field("turResim") String turResim,
-                    @Field("tur") String tur,
-                    @Field("durum") String durum
-            );
+            @Field("id") int id,
+            @Field("turAd") String turAd,
+            @Field("turDetay") String turDetay,
+            @Field("turResim") String turResim,
+            @Field("tur") String tur,
+            @Field("durum") String durum
+    );
 
 
     @FormUrlEncoded
@@ -61,5 +61,12 @@ public interface ApiInterface {
             @Field("mail") String mail,
             @Field("sifre") String sifre,
             @Field("resim") String resim
+    );
+
+    @FormUrlEncoded
+    @POST("login.php")
+    Call<dataKullanici> login(
+            @Field("mail") String mail,
+            @Field("sifre") String sifre
     );
 }

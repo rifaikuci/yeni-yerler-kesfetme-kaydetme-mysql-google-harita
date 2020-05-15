@@ -18,6 +18,8 @@ public class dataKullanici {
     @Expose
     @SerializedName("message") private String message;
     @Expose
+    @SerializedName("resim") private String resim;
+    @Expose
     @SerializedName("success") private boolean success = false;
 
     public boolean getSuccess() {
@@ -36,10 +38,19 @@ public class dataKullanici {
         this.success = success;
     }
 
-    public dataKullanici(String adSoyad, String mail, String sifre) {
+    public dataKullanici(int id, String adSoyad, String mail, String resim) {
+        this.id = id;
         this.adSoyad = adSoyad;
         this.mail = mail;
-        this.sifre = sifre;
+        this.resim = resim;
+    }
+
+    public String getResim() {
+        return resim;
+    }
+
+    public void setResim(String resim) {
+        this.resim = resim;
     }
 
     public int getId() {

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="#345d7e"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Ana_ekran">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="30dp"
+                android:src="@drawable/user_icon"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="2dp" />
+
+            <TextView
+                android:id="@+id/bilgiAdsoyad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_image"
+                android:gravity="center"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:text="Rifai Kuçi"
+                android:textColor="#fff"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <com.ebanx.swipebtn.SwipeButton
+                android:id="@+id/swipe_koleksiyonum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginRight="50dp"
+                app:button_bottom_padding="10dp"
+                android:layout_below="@+id/bilgiAdsoyad"
+                app:button_image_disabled="@drawable/list"
+                app:button_image_enabled="@drawable/list"
+                app:button_left_padding="10dp"
+                app:button_right_padding="10dp"
+                app:button_top_padding="10dp"
+                app:inner_text="Koleksiyonum "
+                app:inner_text_background="@drawable/shape_rounded"
+                app:inner_text_bottom_padding="10dp"
+                app:inner_text_left_padding="10dp"
+                app:inner_text_right_padding="10dp"
+                app:inner_text_size="18sp"
+                app:inner_text_top_padding="10dp" />
+
+            <com.ebanx.swipebtn.SwipeButton
+                android:id="@+id/swipe_kesfet"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginRight="50dp"
+                app:button_bottom_padding="10dp"
+                android:layout_below="@+id/swipe_koleksiyonum"
+                app:button_image_disabled="@drawable/kesfet"
+                app:button_image_enabled="@drawable/kesfet"
+                app:button_left_padding="10dp"
+                app:button_right_padding="10dp"
+                app:button_top_padding="10dp"
+                app:inner_text="Keşfet "
+                app:inner_text_background="@drawable/shape_rounded"
+                app:inner_text_bottom_padding="10dp"
+                app:inner_text_left_padding="10dp"
+                app:inner_text_right_padding="10dp"
+                app:inner_text_size="18sp"
+                app:inner_text_top_padding="10dp" />
+
+            <com.ebanx.swipebtn.SwipeButton
+                android:id="@+id/swipe_cikis_yap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginRight="50dp"
+                app:button_bottom_padding="10dp"
+                android:layout_below="@+id/swipe_kesfet"
+                app:button_image_disabled="@drawable/cikis_yap"
+                app:button_image_enabled="@drawable/cikis_yap"
+                app:button_left_padding="10dp"
+                app:button_right_padding="10dp"
+                app:button_top_padding="10dp"
+                app:inner_text="Çıkış yap "
+                app:inner_text_background="@drawable/shape_rounded"
+                app:inner_text_bottom_padding="10dp"
+                app:inner_text_left_padding="10dp"
+                app:inner_text_right_padding="10dp"
+                app:inner_text_size="18sp"
+                app:inner_text_top_padding="10dp" />
+
+
+            <com.ebanx.swipebtn.SwipeButton
+                android:id="@+id/swipe_uygulamayi_kapat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginRight="50dp"
+                app:button_bottom_padding="10dp"
+                android:layout_below="@+id/swipe_cikis_yap"
+                app:button_image_disabled="@drawable/uygulamayi_kapat"
+                app:button_image_enabled="@drawable/uygulamayi_kapat"
+                app:button_left_padding="10dp"
+                app:button_right_padding="10dp"
+                app:button_top_padding="10dp"
+                app:inner_text="Uygulamayı kapat "
+                app:inner_text_background="@drawable/shape_rounded"
+                app:inner_text_bottom_padding="10dp"
+                app:inner_text_left_padding="10dp"
+                app:inner_text_right_padding="10dp"
+                app:inner_text_size="18sp"
+                android:layout_marginBottom="50dp"
+                app:inner_text_top_padding="10dp"
+                />
+
+
+
+
+
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>
