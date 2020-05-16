@@ -5,7 +5,7 @@
     android:background="#345d7e"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Ana_ekran">
+    tools:context=".activities.Ana_ekran">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

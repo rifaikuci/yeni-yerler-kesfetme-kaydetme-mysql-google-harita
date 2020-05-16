@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:background="#345D7E"
-    tools:context=".data_add">
+    tools:context=".activities.data_add">
 
     <RelativeLayout
         android:id="@+id/header"

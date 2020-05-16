@@ -1,7 +1,9 @@
-package com.rifaikuci.yeni.yerler.kesfetme;
+package com.rifaikuci.yeni.yerler.kesfetme.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,7 +14,11 @@ import android.widget.Toast;
 
 import com.ebanx.swipebtn.OnStateChangeListener;
 import com.ebanx.swipebtn.SwipeButton;
+import com.rifaikuci.yeni.yerler.kesfetme.R;
+import com.rifaikuci.yeni.yerler.kesfetme.login_islemleri.SessionManager;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
 
 public class Ana_ekran extends AppCompatActivity {
 
@@ -20,9 +26,10 @@ public class Ana_ekran extends AppCompatActivity {
     TextView bilgiAdsoyad;
     ImageView profile_image;
     Intent intent;
-    int id=0;
-    String adsoyad,resim;
+    int id = 0;
+    String adsoyad, resim;
 
+    SessionManager sessionManager;
 
 
     @Override
@@ -32,17 +39,21 @@ public class Ana_ekran extends AppCompatActivity {
         transparanEkran();
         variableDesc();
 
-        try {
-            id = intent.getIntExtra("id",0);
-            adsoyad = intent.getStringExtra("name");
-            resim = intent.getStringExtra("resim");
+        sessionManager.checkLogin();
+        HashMap<String, String> user = sessionManager.getUserDetail();
 
+        adsoyad = user.get(sessionManager.NAME);
+        resim = user.get(sessionManager.RESIM);
+        id = Integer.parseInt(user.get(sessionManager.ID));
+
+        try {
+            System.out.println("idS" + id);
             bilgiAdsoyad.setText(adsoyad);
             Picasso.get().load(resim).into(profile_image);
-
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
+
 
         swipe_koleksiyonum.setOnStateChangeListener(new OnStateChangeListener() {
             @Override
@@ -75,21 +86,34 @@ public class Ana_ekran extends AppCompatActivity {
     }
 
     private void kapatClick() {
-        Toast.makeText(getApplicationContext(),"Uygulamayı kapat",Toast.LENGTH_SHORT).show();
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Uyarı")
+                .setMessage("Uygulamayı kapatmak ister misiniz?")
+                .setPositiveButton("Evet", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        Toast.makeText(getApplicationContext(), "Uygulamayı kapatılıyo...", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Hayır", null)
+                .show();
 
     }
 
     private void cikis_yapClick() {
-        Toast.makeText(getApplicationContext(),"Çıkış yap",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Çıkış yapılıyor", Toast.LENGTH_SHORT).show();
+        sessionManager.logout();
 
     }
 
     private void kesfetClick() {
-        Toast.makeText(getApplicationContext(),"Kesfet",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Kesfet", Toast.LENGTH_SHORT).show();
     }
 
     private void koleksiyonumClick() {
-        Toast.makeText(getApplicationContext(),"Koleksiyonum",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "Koleksiyonum", Toast.LENGTH_SHORT).show();
     }
 
     private void variableDesc() {
@@ -105,6 +129,7 @@ public class Ana_ekran extends AppCompatActivity {
 
         intent = getIntent();
 
+        sessionManager = new SessionManager(this);
     }
 
     public void transparanEkran() {

@@ -1,4 +1,4 @@
-package com.rifaikuci.yeni.yerler.kesfetme;
+package com.rifaikuci.yeni.yerler.kesfetme.login_islemleri;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,12 +20,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
+import com.rifaikuci.yeni.yerler.kesfetme.R;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataKullanici;
+import com.rifaikuci.yeni.yerler.kesfetme.login_islemleri.signIn;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 

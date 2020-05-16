@@ -1,4 +1,4 @@
-package com.rifaikuci.yeni.yerler.kesfetme;
+package com.rifaikuci.yeni.yerler.kesfetme.activities;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
+import com.rifaikuci.yeni.yerler.kesfetme.R;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 
 import java.util.ArrayList;
@@ -218,12 +219,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     private void btnPlaceSelectClick() {
-        Intent intent = new Intent(getApplicationContext(),placeSelection.class);
+        Intent intent = new Intent(getApplicationContext(), placeSelection.class);
         startActivity(intent);
     }
 
     private void btnPlaceAddClick() {
-        Intent intent = new Intent(getApplicationContext(),data_add.class);
+        Intent intent = new Intent(getApplicationContext(), data_add.class);
         startActivity(intent);
     }
 

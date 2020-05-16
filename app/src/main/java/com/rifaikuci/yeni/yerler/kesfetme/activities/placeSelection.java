@@ -1,4 +1,4 @@
-package com.rifaikuci.yeni.yerler.kesfetme;
+package com.rifaikuci.yeni.yerler.kesfetme.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +15,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.rifaikuci.yeni.yerler.kesfetme.R;
+import com.rifaikuci.yeni.yerler.kesfetme.activities.MapsActivity;
+import com.rifaikuci.yeni.yerler.kesfetme.classAdapter;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 
 import java.util.ArrayList;

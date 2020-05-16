@@ -1,9 +1,8 @@
-package com.rifaikuci.yeni.yerler.kesfetme;
+package com.rifaikuci.yeni.yerler.kesfetme.login_islemleri;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,57 +16,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
+import com.rifaikuci.yeni.yerler.kesfetme.activities.Ana_ekran;
+import com.rifaikuci.yeni.yerler.kesfetme.R;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataKullanici;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
-
-import android.Manifest;
-import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Toast;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
-import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
-import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -85,6 +41,8 @@ public class signIn extends AppCompatActivity {
     ProgressDialog progressDialog;
     ApiInterface apiInterface;
     ArrayList<dataTur> data;
+
+    SessionManager sessionManager;
 
 
     @Override
@@ -125,6 +83,8 @@ public class signIn extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
+                        Toast.makeText(getApplicationContext(), "Uygulamayı kapatılıyo...", Toast.LENGTH_SHORT).show();
+
                     }
                 })
                 .setNegativeButton("Hayır", null)
@@ -170,14 +130,13 @@ public class signIn extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Kullanıcı durumu pasif edilmiştir!!!", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(getApplicationContext(), "Başarılı", Toast.LENGTH_SHORT).show();
+
                                 int id = response.body().getId();
                                 String adsoyad = response.body().getAdSoyad();
                                 String resim = response.body().getResim();
 
+                                sessionManager.createSession(adsoyad, resim, String.valueOf(id));
                                 Intent intent = new Intent(getApplicationContext(), Ana_ekran.class);
-                                intent.putExtra("name", adsoyad);
-                                intent.putExtra("resim", resim);
-                                intent.putExtra("id", id);
                                 startActivity(intent);
                             }
 
@@ -193,12 +152,7 @@ public class signIn extends AppCompatActivity {
 
                 }
             });
-
-
-            // Intent intent = new Intent(getApplicationContext(), Ana_ekran.class);
-            // startActivity(intent);
         }
-        //Toast.makeText(getApplicationContext(),"Btn giriş ",Toast.LENGTH_SHORT).show();
     }
 
 
@@ -217,6 +171,8 @@ public class signIn extends AppCompatActivity {
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Lütfen Bekleyiniz...");
+
+        sessionManager = new SessionManager(this);
     }
 
     //ekranı transpan yapar

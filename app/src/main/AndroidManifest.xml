@@ -15,17 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Ana_ekran"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-
-        </activity>
         <activity
-            android:name=".signUp"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-
-        </activity>
-        <activity
-            android:name=".signIn"
+            android:name=".activities.Ana_ekran"
             android:theme="@style/Theme.AppCompat.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,16 +26,26 @@
 
         </activity>
         <activity
-            android:name=".data_add"
+            android:name=".login_islemleri.signUp"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".login_islemleri.signIn"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
+
+        </activity>
+        <activity
+            android:name=".activities.data_add"
             android:theme="@style/Theme.AppCompat.NoActionBar"></activity>
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
-            android:name=".dataDetail"
+            android:name=".activities.dataDetail"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
         <activity
-            android:name=".placeSelection"
+            android:name=".activities.placeSelection"
             android:theme="@style/Theme.AppCompat.NoActionBar" />
 
         <meta-data
@@ -52,7 +53,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps"></activity>
     </application>
 

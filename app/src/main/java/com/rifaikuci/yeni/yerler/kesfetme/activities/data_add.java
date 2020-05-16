@@ -1,4 +1,4 @@
-package com.rifaikuci.yeni.yerler.kesfetme;
+package com.rifaikuci.yeni.yerler.kesfetme.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +33,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
+import com.rifaikuci.yeni.yerler.kesfetme.R;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;

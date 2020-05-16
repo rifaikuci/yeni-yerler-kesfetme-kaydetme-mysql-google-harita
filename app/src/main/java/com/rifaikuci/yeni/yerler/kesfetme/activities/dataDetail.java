@@ -1,4 +1,4 @@
-package com.rifaikuci.yeni.yerler.kesfetme;
+package com.rifaikuci.yeni.yerler.kesfetme.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
+import com.rifaikuci.yeni.yerler.kesfetme.R;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 import com.squareup.picasso.Picasso;
 
