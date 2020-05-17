@@ -94,84 +94,6 @@
 
             </com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutTurDetayi"
-            android:layout_below="@+id/layoutTurAdi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColorHint="@color/primary"
-            android:layout_marginLeft="8dp"
-            android:paddingBottom="1dp"
-            android:paddingTop="1dp"
-            android:paddingRight="3dp"
-            android:paddingLeft="8dp"
-            android:layout_marginRight="5dp"
-            app:errorEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextTurDetayi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Tür Detayı Giriniz"
-                android:padding="2dp"
-                android:textSize="16sp"
-                android:lines="4"
-                android:maxLines="4"
-                android:inputType="textMultiLine"
-                android:textColor="#f27281">
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutKonum"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/layoutTurDetayi"
-            android:layout_marginLeft="8dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_toStartOf="@+id/locationIcon"
-            android:layout_toLeftOf="@+id/locationIcon"
-            android:paddingLeft="8dp"
-            android:paddingTop="1dp"
-            android:paddingRight="3dp"
-            android:paddingBottom="1dp"
-            android:textColorHint="@color/primary"
-            app:errorEnabled="true">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextKonum"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Konumunuz için ikona tıklayın"
-                android:inputType="textMultiLine"
-                android:lines="2"
-                android:enabled="false"
-                android:layout_marginLeft="8dp"
-                android:maxLines="1"
-                android:padding="2dp"
-                android:textColor="#f27281"
-                android:textSize="16sp">
-            </com.google.android.material.textfield.TextInputEditText>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <ImageView
-            android:id="@+id/locationIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_below="@+id/layoutTurDetayi"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="7dp"
-            android:layout_marginRight="7dp"
-            android:layout_marginBottom="85dp"
-            android:padding="5dp"
-            android:src="@drawable/ic_location_on_black_24dp">
-        </ImageView>
-
         <RadioGroup
             android:id="@+id/groupTur"
             android:layout_width="match_parent"
@@ -179,7 +101,7 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_margin="4dp"
-            android:layout_below="@id/layoutKonum"
+            android:layout_below="@id/layoutTurDetayi"
             android:background="#f27281">
 
             <RadioButton
@@ -233,6 +155,88 @@
                 android:textStyle="bold">
             </RadioButton>
         </RadioGroup>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutTurDetayi"
+            android:layout_below="@+id/layoutTurAdi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@color/primary"
+            android:layout_marginLeft="8dp"
+            android:paddingBottom="1dp"
+            android:paddingTop="1dp"
+            android:paddingRight="3dp"
+            android:paddingLeft="8dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="8dp"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextTurDetayi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Tür Detayı Giriniz"
+                android:padding="2dp"
+                android:textSize="16sp"
+                android:lines="4"
+                android:maxLines="4"
+                android:inputType="textMultiLine"
+                android:textColor="#f27281">
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layoutKonum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/groupGonder"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toStartOf="@+id/locationIcon"
+            android:layout_toLeftOf="@+id/locationIcon"
+            android:paddingLeft="8dp"
+            android:paddingTop="1dp"
+            android:paddingRight="3dp"
+            android:paddingBottom="1dp"
+            android:layout_marginTop="10dp"
+            android:textColorHint="@color/primary"
+            app:errorEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextKonum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Konumunuz için ikona tıklayın"
+                android:inputType="textMultiLine"
+                android:lines="2"
+                android:enabled="false"
+                android:layout_marginLeft="8dp"
+                android:maxLines="1"
+                android:padding="2dp"
+                android:textColor="#f27281"
+                android:textSize="16sp">
+            </com.google.android.material.textfield.TextInputEditText>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/locationIcon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@+id/groupGonder"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginBottom="5dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_location_on_black_24dp">
+        </ImageView>
+
+
     </RelativeLayout>
 </androidx.core.widget.NestedScrollView>
 

@@ -57,7 +57,7 @@
         android:layout_gravity="bottom|left"
         android:layout_marginBottom="16dp"
         app:backgroundTint="@color/info"
-        android:src="@drawable/list"
+        android:src="@drawable/check_list"
 
         />
 

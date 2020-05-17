@@ -25,12 +25,17 @@ public interface ApiInterface {
             @Field("turEnlem") Double turEnlem,
             @Field("turBoylam") Double turBoylam,
             @Field("tur") String tur,
-            @Field("durum") String durum
+            @Field("durum") String durum,
+            @Field("idKullanici") int idKullanici,
+            @Field("paylasanKullanici") String paylasanKullanici
+
     );
 
     // Get işlemleri
-    @GET("turler.php")
-    Call<List<dataTur>> getTurler();
+    @FormUrlEncoded
+    @POST("turler.php")
+    Call<List<dataTur>> getTurler(
+            @Field("id") int id);
 
 
     //delete işlemleri
@@ -49,8 +54,13 @@ public interface ApiInterface {
             @Field("turAd") String turAd,
             @Field("turDetay") String turDetay,
             @Field("turResim") String turResim,
+            @Field("turEnlem") Double turEnlem,
+            @Field("turBoylam") Double turBoylam,
             @Field("tur") String tur,
-            @Field("durum") String durum
+            @Field("durum") String durum,
+            @Field("idKullanici") int idKullanici,
+            @Field("paylasanKullanici") String paylasanKullanici
+
     );
 
 

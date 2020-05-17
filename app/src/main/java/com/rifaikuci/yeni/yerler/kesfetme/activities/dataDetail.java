@@ -64,14 +64,10 @@ public class dataDetail extends AppCompatActivity {
 
         gelenId=intent.getStringExtra("tur");
 
-        if(MapsActivity.data.get(Integer.parseInt(gelenId)).getIdKullanici()==MapsActivity.idKullanici){
+
             delete.setVisibility(View.VISIBLE);
             edit.setVisibility(View.VISIBLE);
-        }
-        else {
-            delete.setVisibility(View.INVISIBLE);//
-            edit.setVisibility(View.INVISIBLE);
-        }
+
         try {
 
             baslik = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurAd();

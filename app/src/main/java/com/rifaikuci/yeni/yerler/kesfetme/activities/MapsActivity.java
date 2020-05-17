@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,8 +32,10 @@ import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
 import com.rifaikuci.yeni.yerler.kesfetme.R;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
+import com.rifaikuci.yeni.yerler.kesfetme.login_islemleri.SessionManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
@@ -46,22 +49,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private GoogleMap mMap;
 
-    FloatingActionButton btnPlant,btnBird,btnPlaceAdd,btnPlaceSelect;
+    FloatingActionButton btnPlant, btnBird, btnPlaceAdd, btnPlaceSelect;
 
-    boolean birdState  = false,plantState = false;
+    boolean birdState = false, plantState = false;
 
-    static ArrayList<dataTur> data ;
+    static ArrayList<dataTur> data;
 
     LocationManager locationManager;
     LocationListener locationListener;
 
-    public static double lat,log;
+    public static double lat, log;
     ProgressDialog progressDialog;
-    ApiInterface apiInterface ;
-    static  Marker gecici;
-    ArrayList<Marker> bitkiler,kuslar;
-    static int idKullanici=0;
-    String turDetay ="";
+    ApiInterface apiInterface;
+    static Marker gecici;
+    ArrayList<Marker> bitkiler, kuslar;
+    static int idKullanici = 0;
+    String turDetay = "";
+    int id = 0;
+    Intent intent;
+    SessionManager sessionManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,90 +78,103 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         variableDesc();
 
         // get komutu ile verilerimizi getirildi.
-        apiInterface  = ApiClient.getApiClient().create(ApiInterface.class);
-        Call<List<dataTur>> call= apiInterface.getTurler();
+        apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
+        Call<List<dataTur>> call = apiInterface.getTurler(id);
 
         call.enqueue(new Callback<List<dataTur>>() {
             @Override
             public void onResponse(Call<List<dataTur>> call, Response<List<dataTur>> response) {
                 progressDialog.dismiss();
 
-                if( response.isSuccessful() && response.body() !=null){
+                if (response.isSuccessful() && response.body() != null) {
 
                     data = (ArrayList<dataTur>) response.body();
 
 
-                    for (int i =0;i<data.size();i++){
+                    for (int i = 0; i < data.size(); i++) {
 
-                        if(data.get(i).getTurDetay().toString().length()>25)
-                        {
-                            turDetay = data.get(i).getTurDetay().substring(0,25);
-                        }
-                        else {
+                        if (data.get(i).getTurDetay().toString().length() > 25) {
+                            turDetay = data.get(i).getTurDetay().substring(0, 25);
+                        } else {
                             turDetay = data.get(i).getTurDetay();
                         }
 
-                        if(data.get(i).getTur().equalsIgnoreCase("Bitki")) {
+                        if (data.get(i).getTur().equalsIgnoreCase("Bitki")) {
 
-                               gecici = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
-                                       .title(data.get(i).getTurAd())
-                                       .icon(BitmapDescriptorFactory.fromResource(R.drawable.leaf))
-                                       .snippet(turDetay).visible(false));
+                            gecici = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
+                                    .title(data.get(i).getTurAd())
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.leaf))
+                                    .snippet(turDetay).visible(false));
 
-                               bitkiler.add(gecici);
+                            bitkiler.add(gecici);
 
+
+                        } else {
+
+
+                            Marker gedici = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
+                                    .title(data.get(i).getTurAd())
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.dove))
+                                    .snippet(turDetay).visible(false));
+
+                            kuslar.add(gedici);
 
                         }
-                        else {
-
-
-                                Marker gedici = mMap.addMarker(new MarkerOptions().position(new LatLng(data.get(i).getTurEnlem(), data.get(i).getTurBoylam()))
-                                        .title(data.get(i).getTurAd())
-                                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.dove))
-                                        .snippet(turDetay).visible(false));
-
-                                kuslar.add(gedici);
-
-                             } } } }
-
+                    }
+                }
+            }
 
 
             @Override
             public void onFailure(Call<List<dataTur>> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(getApplicationContext(),"internet bağlantınızı kontrol ediniz!!!",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "internet bağlantınızı kontrol ediniz!!!", Toast.LENGTH_SHORT).show();
             }
         });
 
 
-
         btnPlant.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { btnPlantClick() ; } });
+            public void onClick(View v) {
+                btnPlantClick();
+            }
+        });
 
         btnBird.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { btnBirdClick(); } });
+            public void onClick(View v) {
+                btnBirdClick();
+            }
+        });
 
         btnPlaceAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { btnPlaceAddClick(); }});
+            public void onClick(View v) {
+                btnPlaceAddClick();
+            }
+        });
 
         btnPlaceSelect.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { btnPlaceSelectClick(); }});
+            public void onClick(View v) {
+                btnPlaceSelectClick();
+            }
+        });
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        try{ mMap.setMyLocationEnabled(true); } // haritada konumu gösterme
-        catch (Exception e ){ e.toString(); }
+        try {
+            mMap.setMyLocationEnabled(true);
+        } // haritada konumu gösterme
+        catch (Exception e) {
+            e.toString();
+        }
 
 
         //locations
@@ -167,7 +186,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
             @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) { }
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
 
             @Override
             public void onProviderEnabled(String provider) {
@@ -180,39 +200,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
 
-       mMap.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
-           @Override
-           public void onInfoWindowLongClick(Marker marker) {
+        mMap.setOnInfoWindowLongClickListener(new GoogleMap.OnInfoWindowLongClickListener() {
+            @Override
+            public void onInfoWindowLongClick(Marker marker) {
 
+                Intent intent = new Intent(getApplicationContext(), dataDetail.class);
+                intent.putExtra("tur", marker.getId().substring(1));
 
+                startActivity(intent);
+            }
 
-               Intent intent = new Intent(getApplicationContext(), dataDetail.class);
-               intent.putExtra("tur",marker.getId().substring(1));
-
-
-               startActivity(intent);
-
-           }
-
-       });
+        });
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101); }
-
-        else { try{
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener); }
-
-            catch (Exception e ){ e.toString(); }
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+        } else {
+            try {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 1, locationListener);
+            } catch (Exception e) {
+                e.toString();
+            }
 
             try {
                 Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 if (lastLocation != null) {
                     lat = lastLocation.getLatitude();
-                    lat = lastLocation.getLongitude(); } }
+                    lat = lastLocation.getLongitude();
+                }
+            } catch (Exception e) {
+                e.toString();
+            }
+        }
 
-            catch (Exception e){ e.toString(); } }
-
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.6921974,32.0653447),5));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.6921974, 32.0653447), 5));
         //location izinleri
         locationPermission();
     }
@@ -229,54 +249,67 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void btnBirdClick() {
-        if(birdState==false) {
-            for (int i = 0; i<kuslar.size();i++){ kuslar.get(i).setVisible(true); }
+        if (birdState == false) {
+            for (int i = 0; i < kuslar.size(); i++) {
+                kuslar.get(i).setVisible(true);
+            }
 
             btnBird.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
-            birdState=true; }
-
-        else {
-            for (int i = 0; i<kuslar.size();i++){
-             kuslar.get(i).setVisible(false);
+            birdState = true;
+        } else {
+            for (int i = 0; i < kuslar.size(); i++) {
+                kuslar.get(i).setVisible(false);
 
             }
 
             btnBird.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.inverse)));
-            birdState=false;
+            birdState = false;
         }
     }
 
     private void btnPlantClick() {
-        if(plantState==false) {
-            for (int i = 0; i<bitkiler.size();i++){
+        if (plantState == false) {
+            for (int i = 0; i < bitkiler.size(); i++) {
                 bitkiler.get(i).setVisible(true);
             }
 
             btnPlant.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
-            plantState=true;
-        }
-
-        else {
-            for (int i = 0; i<bitkiler.size();i++){
+            plantState = true;
+        } else {
+            for (int i = 0; i < bitkiler.size(); i++) {
                 bitkiler.get(i).setVisible(false);
             }
 
             btnPlant.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.inverse)));
-            plantState=false;
-            } }
+            plantState = false;
+        }
+    }
 
 
     private void variableDesc() {
 
-        btnPlant       = (FloatingActionButton) findViewById(R.id.btnPlant);
-        btnBird        = (FloatingActionButton) findViewById(R.id.btnBird);
-        btnPlaceAdd    = (FloatingActionButton) findViewById(R.id.btnPlaceAdd);
+        btnPlant = (FloatingActionButton) findViewById(R.id.btnPlant);
+        btnBird = (FloatingActionButton) findViewById(R.id.btnBird);
+        btnPlaceAdd = (FloatingActionButton) findViewById(R.id.btnPlaceAdd);
         btnPlaceSelect = (FloatingActionButton) findViewById(R.id.btnPlaceSelect);
         bitkiler = new ArrayList<>();
         kuslar = new ArrayList<>();
         data = new ArrayList<>();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Lütfen Bekleyiniz...");
+
+        intent = getIntent();
+        sessionManager = new SessionManager(this);
+
+        try {
+            sessionManager.checkLogin();
+            HashMap<String, String> user = sessionManager.getUserDetail();
+            id = Integer.parseInt(user.get(sessionManager.ID));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void locations() {
@@ -285,13 +318,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //konum izni
     private void locationPermission() {
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
-        }else {
-            try{
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        } else {
+            try {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 1, locationListener);
 
-            }catch (Exception e ){
+            } catch (Exception e) {
                 e.toString();
             }
         }
@@ -301,30 +334,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if(grantResults.length>0){
-            if(requestCode==101){
-                if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                    try{
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,1,locationListener);
+        if (grantResults.length > 0) {
+            if (requestCode == 101) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    try {
+                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 1, locationListener);
 
-                    }catch (Exception e ){
+                    } catch (Exception e) {
                         e.toString();
                     }
-
                 }
-
             }
         }
     }
 
     //ekranı transpan yapar
-     public  void transparanEkran(){
-        if(Build.VERSION.SDK_INT>=19)
-        {
+    public void transparanEkran() {
+        if (Build.VERSION.SDK_INT >= 19) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
-        else
-        {
+        } else {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }

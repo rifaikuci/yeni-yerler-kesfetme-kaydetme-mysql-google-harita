@@ -113,7 +113,9 @@ public class Ana_ekran extends AppCompatActivity {
     }
 
     private void koleksiyonumClick() {
-        Toast.makeText(getApplicationContext(), "Koleksiyonum", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+        intent.putExtra("id",id);
+        startActivity(intent);
     }
 
     private void variableDesc() {
