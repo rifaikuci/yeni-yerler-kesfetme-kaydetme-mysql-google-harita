@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.location.Location;
@@ -15,10 +16,21 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -45,7 +57,7 @@ import retrofit2.Response;
 import static java.lang.Integer.parseInt;
 
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class Koleksiyonlarim extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
@@ -68,6 +80,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     int id = 0;
     Intent intent;
     SessionManager sessionManager;
+    private static final int REQUEST_CHECK_SETTINGS = 0x1;
+    private static GoogleApiClient mGoogleApiClient;
+    private static final int ACCESS_FINE_LOCATION_INTENT_ID = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +184,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        //google izinleri
+        initGoogleAPIClient();
+        checkPermissions();
+        //bu ikisi alundığında izinlerin çağrılma işlemleri tamamlanacak
         try {
             mMap.setMyLocationEnabled(true);
         } // haritada konumu gösterme
@@ -191,12 +210,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             @Override
             public void onProviderEnabled(String provider) {
-                Toast.makeText(getApplicationContext(), "Konum Açık", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onProviderDisabled(String provider) {
-                Toast.makeText(getApplicationContext(), "Konum Açık Olmalı!", Toast.LENGTH_LONG).show();
             }
         };
 
@@ -234,12 +251,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(38.6921974, 32.0653447), 5));
         //location izinleri
-        locationPermission();
     }
 
 
     private void btnPlaceSelectClick() {
         Intent intent = new Intent(getApplicationContext(), placeSelection.class);
+        intent.putExtra("gelis", "koleksiyon");
         startActivity(intent);
     }
 
@@ -312,41 +329,113 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void locations() {
-
-    }
-
-    //konum izni
-    private void locationPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-        } else {
-            try {
-                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 1, locationListener);
-
-            } catch (Exception e) {
-                e.toString();
+    //  Konum izni için User Permission
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == ACCESS_FINE_LOCATION_INTENT_ID) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(Koleksiyonlarim.this, "İzin verildi", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(Koleksiyonlarim.this, "İzin verilmedi", Toast.LENGTH_LONG).show();
             }
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
 
-        if (grantResults.length > 0) {
-            if (requestCode == 101) {
-                if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    try {
-                        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 1, locationListener);
+            if (resultCode == RESULT_OK) {
 
-                    } catch (Exception e) {
-                        e.toString();
-                    }
-                }
+                Toast.makeText(Koleksiyonlarim.this, "GPS Aktif", Toast.LENGTH_LONG).show();
+            } else {
+
+                Toast.makeText(Koleksiyonlarim.this, "GPS Pasif", Toast.LENGTH_LONG).show();
             }
+
         }
     }
+
+    private void checkPermissions() {
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (ContextCompat.checkSelfPermission(Koleksiyonlarim.this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED)
+                requestLocationPermission();
+            else
+                showLocationState();
+        } else
+            showLocationState();
+
+    }
+
+    private void requestLocationPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(Koleksiyonlarim.this, android.Manifest.permission.ACCESS_FINE_LOCATION)) {
+            ActivityCompat.requestPermissions(Koleksiyonlarim.this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    ACCESS_FINE_LOCATION_INTENT_ID);
+
+        } else {
+            ActivityCompat.requestPermissions(Koleksiyonlarim.this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    ACCESS_FINE_LOCATION_INTENT_ID);
+        }
+    }
+
+    private void initGoogleAPIClient() {
+        mGoogleApiClient = new GoogleApiClient.Builder(Koleksiyonlarim.this)
+                .addApi(LocationServices.API)
+                .build();
+        mGoogleApiClient.connect();
+    }
+
+    private void showLocationState() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);//Setting priotity of Location request to high
+        locationRequest.setInterval(30 * 1000);
+        locationRequest.setFastestInterval(5 * 1000);//5 sec Time interval for location update
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        builder.setAlwaysShow(true); //this is the key ingredient to show dialog always when GPS is off
+
+        PendingResult<LocationSettingsResult> result =
+                LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
+        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+            @Override
+            public void onResult(LocationSettingsResult result) {
+                final Status status = result.getStatus();
+                final LocationSettingsStates state = result.getLocationSettingsStates();
+                switch (status.getStatusCode()) {
+                    case LocationSettingsStatusCodes.SUCCESS:
+                        //Konum ayarları etkin ise buraya
+                        // istekler burda
+                        //updateGPSStatus("GPS is Enabled in your device");
+                        Log.d("locationEnable", "SUCCESS");
+                        break;
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                        // Konum ayarları etkin değil fakat dialog gösterip konum açılmasını sağlıyor isek buraya
+                        // Dialog göster
+                        try {
+                            // startResolutionForResult(), çağırıp kontrol edilir
+                            Log.d("locationEnable", "RESOLUTION_REQUIRED");
+                            status.startResolutionForResult(Koleksiyonlarim.this, REQUEST_CHECK_SETTINGS);
+                        } catch (IntentSender.SendIntentException e) {
+                            e.printStackTrace();
+                            // Ignore the error.
+                        }
+                        break;
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        // Konum eğer açılamıyor ise buraya düşer
+                        Log.d("locationEnable", "SETTINGS_CHANGE_UNAVAILABLE");
+                        break;
+                }
+            }
+        });
+    }
+    // Konum izinleri için tüm işlevler bitiş
 
     //ekranı transpan yapar
     public void transparanEkran() {
@@ -357,4 +446,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), Ana_ekran.class);
+        startActivity(intent);
+    }
 }

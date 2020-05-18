@@ -38,6 +38,10 @@ public interface ApiInterface {
             @Field("id") int id);
 
 
+    @GET("kesfet.php")
+    Call<List<dataTur>> getKesfet();
+
+
     //delete işlemleri
     @FormUrlEncoded
     @POST("deleteTur.php")

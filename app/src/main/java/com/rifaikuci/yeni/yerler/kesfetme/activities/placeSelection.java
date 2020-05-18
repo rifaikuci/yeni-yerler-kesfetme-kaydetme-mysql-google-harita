@@ -16,10 +16,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rifaikuci.yeni.yerler.kesfetme.R;
-import com.rifaikuci.yeni.yerler.kesfetme.activities.MapsActivity;
 import com.rifaikuci.yeni.yerler.kesfetme.classAdapter;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 
@@ -29,10 +29,12 @@ public class placeSelection extends AppCompatActivity {
     TextView txtBack;
     Button btnRota;
     classAdapter adapter;
-    ListView  listPlace;
+    ListView listPlace;
     ArrayList<dataTur> gecici;
+    ArrayList<dataTur> aktar;
     EditText search;
-
+    Intent intent;
+    String gelis = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +43,32 @@ public class placeSelection extends AppCompatActivity {
         transparanEkran();
         variableDesc();
 
+        intent = getIntent();
+        gelis = intent.getStringExtra("gelis");
+
+        if ("koleksiyon".equalsIgnoreCase(gelis)) {
+            System.out.println("Gelis türü koleksiyon");
+            aktar = Koleksiyonlarim.data;
+
+        } else {
+            System.out.println("Gelis türü kesfet");
+            aktar = KesfetActivity.data;
+        }
+
         gecici = new ArrayList<>();
         txtBack.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { txtBackClick(); }});
+            public void onClick(View v) {
+                txtBackClick();
+            }
+        });
 
-        for (dataTur data : MapsActivity.data){ gecici.add(data); }
+        for (dataTur data : aktar) {
+            gecici.add(data);
+        }
 
-        adapter = new classAdapter(this, MapsActivity.data);
+        adapter = new classAdapter(this, aktar);
         listPlace.setAdapter(adapter);
-
 
         //edittext değerine göre view değeri değişir.
         search.addTextChangedListener(new TextWatcher() {
@@ -63,9 +81,9 @@ public class placeSelection extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 gecici.clear();
-                for (dataTur data : MapsActivity.data){
+                for (dataTur data : aktar) {
 
-                    if(data.getTurAd().contains(search.getText().toString().trim())==true){
+                    if (data.getTurAd().contains(search.getText().toString().trim()) == true) {
                         gecici.add(data);
                     }
                 }
@@ -78,7 +96,7 @@ public class placeSelection extends AppCompatActivity {
             }
         });
 
-        adapter.updateRecords(MapsActivity.data);
+        adapter.updateRecords(aktar);
 
 
         //Satır click İslemleri
@@ -90,8 +108,9 @@ public class placeSelection extends AppCompatActivity {
 
                 if (model.isSelected()) {
                     model.setSelected(false);
+                } else {
+                    model.setSelected(true);
                 }
-                else { model.setSelected(true); }
 
                 gecici.set(i, model);
 
@@ -105,39 +124,41 @@ public class placeSelection extends AppCompatActivity {
                 btnRotaClick();
             }
         });
-
     }
 
     private void btnRotaClick() {
-        int a =0;
-        for (dataTur fe: MapsActivity.data)
-        {
-            if(fe.isSelected()){
+        int a = 0;
+        for (dataTur fe : aktar) {
+            if (fe.isSelected()) {
                 a++;
             }
         }
-        System.out.println("Seçilen sayı"+a);
+        System.out.println("Seçilen sayı" + a);
 
     }
 
-
     // geri butonu
     private void txtBackClick() {
-        Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+
+        if ("koleksiyon".equalsIgnoreCase(gelis)) {
+            intent = new Intent(getApplicationContext(), Koleksiyonlarim.class);
+        } else {
+            intent = new Intent(getApplicationContext(), KesfetActivity.class);
+        }
         startActivity(intent);
 
     }
 
-
     //Değişkenleri Tanımlama
     private void variableDesc() {
 
-        txtBack   = (TextView) findViewById(R.id.txtBack);
-        btnRota   = (Button) findViewById(R.id.btnRota);
+        txtBack = (TextView) findViewById(R.id.txtBack);
+        btnRota = (Button) findViewById(R.id.btnRota);
         listPlace = (ListView) findViewById(R.id.listPlace);
-        search    = (EditText) findViewById(R.id.search);
+        search = (EditText) findViewById(R.id.search);
 
     }
+
     //ekranı transpan yapar
     public void transparanEkran() {
         if (Build.VERSION.SDK_INT >= 19) {

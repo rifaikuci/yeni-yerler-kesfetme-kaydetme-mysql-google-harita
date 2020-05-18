@@ -42,12 +42,12 @@ public class Ana_ekran extends AppCompatActivity {
         sessionManager.checkLogin();
         HashMap<String, String> user = sessionManager.getUserDetail();
 
-        adsoyad = user.get(sessionManager.NAME);
-        resim = user.get(sessionManager.RESIM);
-        id = Integer.parseInt(user.get(sessionManager.ID));
 
         try {
-            System.out.println("idS" + id);
+            adsoyad = user.get(sessionManager.NAME);
+            resim = user.get(sessionManager.RESIM);
+            id = Integer.parseInt(user.get(sessionManager.ID));
+
             bilgiAdsoyad.setText(adsoyad);
             Picasso.get().load(resim).into(profile_image);
         } catch (Exception e) {
@@ -59,13 +59,14 @@ public class Ana_ekran extends AppCompatActivity {
             @Override
             public void onStateChange(boolean active) {
                 koleksiyonumClick();
+
             }
         });
-
         swipe_kesfet.setOnStateChangeListener(new OnStateChangeListener() {
             @Override
             public void onStateChange(boolean active) {
                 kesfetClick();
+
             }
         });
 
@@ -94,12 +95,12 @@ public class Ana_ekran extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
+                        System.exit(0);
                         Toast.makeText(getApplicationContext(), "Uygulamayı kapatılıyo...", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .setNegativeButton("Hayır", null)
                 .show();
-
     }
 
     private void cikis_yapClick() {
@@ -110,11 +111,13 @@ public class Ana_ekran extends AppCompatActivity {
 
     private void kesfetClick() {
         Toast.makeText(getApplicationContext(), "Kesfet", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getApplicationContext(), KesfetActivity.class);
+        startActivity(intent);
     }
 
     private void koleksiyonumClick() {
-        Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
-        intent.putExtra("id",id);
+        Intent intent = new Intent(getApplicationContext(), Koleksiyonlarim.class);
+        intent.putExtra("id", id);
         startActivity(intent);
     }
 
@@ -141,4 +144,5 @@ public class Ana_ekran extends AppCompatActivity {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
+
 }

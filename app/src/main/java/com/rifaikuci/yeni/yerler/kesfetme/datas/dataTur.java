@@ -10,38 +10,44 @@ import static java.lang.Boolean.FALSE;
 
 public class dataTur {
     @Expose
-    @SerializedName("id") private int id;
+    @SerializedName("id")
+    private int id;
     @Expose
-    @SerializedName("turAd") private String turAd;
+    @SerializedName("turAd")
+    private String turAd;
     @Expose
-    @SerializedName("turDetay") private String turDetay;
+    @SerializedName("turDetay")
+    private String turDetay;
     @Expose
-    @SerializedName("turResim") private String turResim;
+    @SerializedName("turResim")
+    private String turResim;
     @Expose
-    @SerializedName("turEnlem") private Double turEnlem;
+    @SerializedName("turEnlem")
+    private Double turEnlem;
     @Expose
-    @SerializedName("turBoylam") private Double turBoylam;
+    @SerializedName("turBoylam")
+    private Double turBoylam;
     @Expose
-    @SerializedName("tur") private String tur;
+    @SerializedName("tur")
+    private String tur;
     @Expose
-    @SerializedName("durum") private String durum;
-
-    public String getTurKayitTarih() {
-        return turKayitTarih;
-    }
-
-    public void setTurKayitTarih(String turKayitTarih) {
-        this.turKayitTarih = turKayitTarih;
-    }
-
+    @SerializedName("durum")
+    private String durum;
     @Expose
-    @SerializedName("turKayitTarih") private String turKayitTarih;
+    @SerializedName("turKayitTarih")
+    private String turKayitTarih;
     @Expose
-    @SerializedName("idKullanici") private int idKullanici;
+    @SerializedName("paylasanKullanici")
+    private String paylasanKullanici;
     @Expose
-    @SerializedName("isSelected") private boolean isSelected = false;
+    @SerializedName("idKullanici")
+    private int idKullanici;
     @Expose
-    @SerializedName("success") private boolean success = false;
+    @SerializedName("isSelected")
+    private boolean isSelected = false;
+    @Expose
+    @SerializedName("success")
+    private boolean success = false;
 
     public boolean getSuccess() {
         return success;
@@ -49,6 +55,22 @@ public class dataTur {
 
     public void setSuccess(boolean success) {
         this.success = success;
+    }
+
+    public String getPaylasanKullanici() {
+        return paylasanKullanici;
+    }
+
+    public void setPaylasanKullanici(String paylasanKullanici) {
+        this.paylasanKullanici = paylasanKullanici;
+    }
+
+    public String getTurKayitTarih() {
+        return turKayitTarih;
+    }
+
+    public void setTurKayitTarih(String turKayitTarih) {
+        this.turKayitTarih = turKayitTarih;
     }
 
     public dataTur(String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String durum) {
@@ -59,7 +81,7 @@ public class dataTur {
         this.turBoylam = turBoylam;
         this.tur = tur;
         this.durum = durum;
-        this.isSelected =true;
+        this.isSelected = true;
     }
 
     public dataTur(int id, String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, String turKayitTarih, boolean isSelected) {
@@ -75,7 +97,6 @@ public class dataTur {
     }
 
 
-
     public dataTur(int id, String turAd, String turDetay, String turResim, Double turEnlem, Double turBoylam, String tur, boolean isSelected, int idKullanici) {
         this.turAd = turAd;
         this.turDetay = turDetay;
@@ -84,8 +105,8 @@ public class dataTur {
         this.turBoylam = turBoylam;
         this.tur = tur;
         this.isSelected = isSelected;
-        this.id =id;
-        this.idKullanici=idKullanici;
+        this.id = id;
+        this.idKullanici = idKullanici;
     }
 
     public void setTurAd(String turAd) {
@@ -148,7 +169,9 @@ public class dataTur {
         this.idKullanici = idKullanici;
     }
 
-    public boolean isSelected() { return isSelected; }
+    public boolean isSelected() {
+        return isSelected;
+    }
 
     public void setSelected(boolean selected) {
         isSelected = selected;

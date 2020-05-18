@@ -222,5 +222,22 @@ public class signUp extends AppCompatActivity {
         resim.setImageResource(R.drawable.selection);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        temizle();
+        finish();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        temizle();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        temizle();
+    }
 }

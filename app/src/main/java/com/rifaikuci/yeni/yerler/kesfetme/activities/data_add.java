@@ -86,17 +86,17 @@ public class data_add extends AppCompatActivity {
         try {
             gelen = intent.getStringExtra("gelis");
             gelenId = intent.getStringExtra("guncelleId");
-            id = MapsActivity.data.get(Integer.parseInt(gelenId)).getid();
+            id = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getid();
 
             if (gelen.equalsIgnoreCase("edit")) {
 
-                baslik = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurAd();
-                resim = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurResim();
-                detay = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurDetay();
-                enlem = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurEnlem();
-                boylam = MapsActivity.data.get(Integer.parseInt(gelenId)).getTurBoylam();
-                tur = MapsActivity.data.get(Integer.parseInt(gelenId)).getTur();
-                durum = MapsActivity.data.get(Integer.parseInt(gelenId)).getdurum();
+                baslik = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTurAd();
+                resim = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTurResim();
+                detay = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTurDetay();
+                enlem = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTurEnlem();
+                boylam = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTurBoylam();
+                tur = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTur();
+                durum = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getdurum();
 
                 txtBaslik.setText("Güncelleme Formu");
                 btnKaydet.setText("Güncelle");
@@ -133,9 +133,9 @@ public class data_add extends AppCompatActivity {
             //Konum değiştiğinde yapılacak işlemler.
             @Override
             public void onLocationChanged(Location location) {
-                MapsActivity.lat = location.getLatitude();
-                MapsActivity.log = location.getLongitude();
-                layoutKonum.getEditText().setText("Enlem :" + MapsActivity.lat + "\nBoylam :" + MapsActivity.log);
+                Koleksiyonlarim.lat = location.getLatitude();
+                Koleksiyonlarim.log = location.getLongitude();
+                layoutKonum.getEditText().setText("Enlem :" + Koleksiyonlarim.lat + "\nBoylam :" + Koleksiyonlarim.log);
             }
 
             @Override
@@ -165,9 +165,9 @@ public class data_add extends AppCompatActivity {
             //bilinen son konumu aldırma
             Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (lastLocation != null) {
-                MapsActivity.lat = lastLocation.getLatitude();
-                MapsActivity.log = lastLocation.getLongitude();
-                layoutKonum.getEditText().setText("Enlem :" + MapsActivity.lat + "\nBoylam :" + MapsActivity.log);
+                Koleksiyonlarim.lat = lastLocation.getLatitude();
+                Koleksiyonlarim.log = lastLocation.getLongitude();
+                layoutKonum.getEditText().setText("Enlem :" + Koleksiyonlarim.lat + "\nBoylam :" + Koleksiyonlarim.log);
             }
         }
 
@@ -199,8 +199,8 @@ public class data_add extends AppCompatActivity {
                     turResim = "";
                 }
 
-                turEnlem = MapsActivity.lat;
-                turBoylam = MapsActivity.log;
+                turEnlem = Koleksiyonlarim.lat;
+                turBoylam = Koleksiyonlarim.log;
 
                 radioTurId = groupTur.getCheckedRadioButtonId();
                 rbTur = (RadioButton) findViewById(radioTurId);
@@ -304,7 +304,7 @@ public class data_add extends AppCompatActivity {
 
     //ikonc click işlemleri
     private void locationIconClick() {
-        layoutKonum.getEditText().setText("Enlem :" + MapsActivity.lat + "\nBoylam :" + MapsActivity.log);
+        layoutKonum.getEditText().setText("Enlem :" + Koleksiyonlarim.lat + "\nBoylam :" + Koleksiyonlarim.log);
 
     }
 
@@ -344,7 +344,7 @@ public class data_add extends AppCompatActivity {
 
     //geri butonu
     private void btnVazgecClick() {
-        Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
+        Intent intent = new Intent(getApplicationContext(), Koleksiyonlarim.class);
         startActivity(intent);
         finish();
     }
@@ -450,4 +450,11 @@ public class data_add extends AppCompatActivity {
         return Base64.encodeToString(imgByte, Base64.DEFAULT);
     }
     //Bitiş
+
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), Koleksiyonlarim.class);
+        startActivity(intent);
+    }
 }

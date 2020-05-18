@@ -20,6 +20,7 @@ import com.rifaikuci.yeni.yerler.kesfetme.API.ApiClient;
 import com.rifaikuci.yeni.yerler.kesfetme.API.ApiInterface;
 import com.rifaikuci.yeni.yerler.kesfetme.activities.Ana_ekran;
 import com.rifaikuci.yeni.yerler.kesfetme.R;
+import com.rifaikuci.yeni.yerler.kesfetme.activities.KesfetActivity;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataKullanici;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 
@@ -72,9 +73,26 @@ public class signIn extends AppCompatActivity {
                 txtKapatClick();
             }
         });
+
+        txtKayitOlmadan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                txtKayitOlmadanClick();
+            }
+        });
+    }
+
+    private void txtKayitOlmadanClick() {
+        Intent intent = new Intent(getApplicationContext(), KesfetActivity.class);
+        intent.putExtra("aktivite", "signin");
+        startActivity(intent);
     }
 
     private void txtKapatClick() {
+        uygulamaKapat();
+    }
+
+    private void uygulamaKapat() {
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Uyarı")
@@ -83,7 +101,8 @@ public class signIn extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
-                        Toast.makeText(getApplicationContext(), "Uygulamayı kapatılıyo...", Toast.LENGTH_SHORT).show();
+                        System.exit(0);
+                        Toast.makeText(getApplicationContext(), "Uygulamayı kapatılıyor...", Toast.LENGTH_SHORT).show();
 
                     }
                 })
@@ -183,5 +202,11 @@ public class signIn extends AppCompatActivity {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        uygulamaKapat();
+    }
+
 
 }

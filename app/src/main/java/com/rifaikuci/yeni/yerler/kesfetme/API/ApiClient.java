@@ -8,13 +8,13 @@ public class ApiClient {
     //GET-POST işlemlerinin yapılacağı alan
     //Gradle dosyasına 2 adet impletion işlemi yapılır.
 
-    private static  final  String BASE_URL = "https://rifaikuci.com/lisans/";
+    private static final String BASE_URL = "https://rifaikuci.com/lisans/";
     private static Retrofit retrofit;
 
-    public static Retrofit getApiClient(){
+    public static Retrofit getApiClient() {
 
-        if(retrofit ==null){
-            retrofit  = new Retrofit.Builder()
+        if (retrofit == null) {
+            retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
