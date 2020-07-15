@@ -29,6 +29,19 @@ public class classAdapter extends BaseAdapter {
 
     }
 
+    public int  secilmis() {
+       int s =0;
+
+       for (int i =0; i<datas.size(); i++)
+       {
+           if(datas.get(i).isSelected() == true){
+               s++;
+           }
+       }
+
+        return s;
+    }
+
     @Override
     public int getCount() {
         return datas.size();

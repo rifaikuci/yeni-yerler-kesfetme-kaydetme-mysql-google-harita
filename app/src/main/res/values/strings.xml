@@ -2,5 +2,6 @@
     <string name="app_name">yerler</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_kesfet">Map</string>
+    <string name="mapbox">pk.eyJ1IjoicmZhaTQ3IiwiYSI6ImNrYXNuOG13aTBncTkyc21vMzZ1MDFpZjcifQ.qV_zoDzhUQrNQDnefav2Bg</string>
 
 </resources>

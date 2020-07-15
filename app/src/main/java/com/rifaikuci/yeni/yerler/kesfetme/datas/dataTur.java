@@ -9,6 +9,21 @@ import com.google.gson.annotations.SerializedName;
 import static java.lang.Boolean.FALSE;
 
 public class dataTur {
+    public dataTur(String turAd, String turDetay, Double turEnlem, Double turBoylam) {
+        this.turAd = turAd;
+        this.turDetay = turDetay;
+        this.turEnlem = turEnlem;
+        this.turBoylam = turBoylam;
+    }
+
+    public dataTur(int id, String turAd, String turDetay, Double turEnlem, Double turBoylam) {
+        this.turAd = turAd;
+        this.turDetay = turDetay;
+        this.turEnlem = turEnlem;
+        this.turBoylam = turBoylam;
+        this.id = id;
+    }
+
     @Expose
     @SerializedName("id")
     private int id;

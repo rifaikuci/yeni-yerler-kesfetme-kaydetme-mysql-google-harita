@@ -21,6 +21,7 @@ import com.rifaikuci.yeni.yerler.kesfetme.R;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -40,6 +41,7 @@ public class dataDetail extends AppCompatActivity {
     ApiInterface apiInterface;
     String gelenId, baslik, resim, detay, turResim, turResimYol, tarihDuzenli, kesfetDetay = "";
     String[] gecici;
+    ArrayList<dataTur> aktar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +56,14 @@ public class dataDetail extends AppCompatActivity {
                 txtBackClick();
             }
         });
+        kesfetDetay = intent.getStringExtra("kesfet");
+        if ("kesfet".equalsIgnoreCase(kesfetDetay)) {
+            aktar = KesfetActivity.data;
+        }else{
+            aktar =Koleksiyonlarim.data;
+        }
 
-        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
                 if (status != TextToSpeech.ERROR) {
@@ -65,13 +73,15 @@ public class dataDetail extends AppCompatActivity {
         });
 
         gelenId = intent.getStringExtra("tur");
+
+
         try {
 
-            baslik = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTurAd();
-            resim = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTurResim();
-            detay = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTurDetay();
+            baslik =aktar.get(Integer.parseInt(gelenId)).getTurAd();
+            resim = aktar.get(Integer.parseInt(gelenId)).getTurResim();
+            detay = aktar.get(Integer.parseInt(gelenId)).getTurDetay();
 
-            tarihDuzenli = tarih(Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTurKayitTarih());
+            tarihDuzenli = tarih(aktar.get(Integer.parseInt(gelenId)).getTurKayitTarih());
             txtBaslik.setText(baslik);
             Picasso.get().load(resim).into(image);
 
@@ -79,11 +89,10 @@ public class dataDetail extends AppCompatActivity {
             System.out.println(e.toString());
         }
 
-        kesfetDetay = intent.getStringExtra("kesfet");
         if ("kesfet".equalsIgnoreCase(kesfetDetay)) {
             try {
                 txtDetail.setText("Kayıt Tarihi : " + tarihDuzenli + " \n" + detay + "\n\n\nPaylaşan Kullanıcı: "
-                        + KesfetActivity.data.get(Integer.parseInt(gelenId)).getPaylasanKullanici());
+                        + aktar.get(Integer.parseInt(gelenId)).getPaylasanKullanici());
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -91,6 +100,13 @@ public class dataDetail extends AppCompatActivity {
             delete.setVisibility(View.INVISIBLE);
             edit.setVisibility(View.INVISIBLE);
         } else {
+            try {
+                txtDetail.setText("Kayıt Tarihi : " + tarihDuzenli + " \n" + detay);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             delete.setVisibility(View.VISIBLE);
             edit.setVisibility(View.VISIBLE);
         }
@@ -124,7 +140,7 @@ public class dataDetail extends AppCompatActivity {
         // progressDialog.show();
         apiInterface = ApiClient.getApiClient().create(ApiInterface.class);
 
-        id = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getid();
+        id = aktar.get(Integer.parseInt(gelenId)).getid();
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(dataDetail.this);
@@ -136,7 +152,7 @@ public class dataDetail extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
 
                 progressDialog.show();
-                turResim = Koleksiyonlarim.data.get(Integer.parseInt(gelenId)).getTurResim();
+                turResim = aktar.get(Integer.parseInt(gelenId)).getTurResim();
                 gecici = turResim.split("/");
                 turResimYol = gecici[gecici.length - 1];
 

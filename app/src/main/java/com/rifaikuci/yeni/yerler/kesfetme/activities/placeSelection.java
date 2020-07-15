@@ -14,24 +14,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rifaikuci.yeni.yerler.kesfetme.R;
 import com.rifaikuci.yeni.yerler.kesfetme.classAdapter;
 import com.rifaikuci.yeni.yerler.kesfetme.datas.dataTur;
+import com.rifaikuci.yeni.yerler.kesfetme.mapbox;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 
 public class placeSelection extends AppCompatActivity {
 
-
     TextView txtBack;
     Button btnRota;
     classAdapter adapter;
     ListView listPlace;
-    ArrayList<dataTur> gecici;
-    ArrayList<dataTur> aktar;
+    ArrayList<dataTur> gecici, aktar;
+    dataTur model;
+    public static ArrayList<dataTur> gidilecekYerler;
+
     EditText search;
     Intent intent;
     String gelis = "";
@@ -42,6 +44,7 @@ public class placeSelection extends AppCompatActivity {
         setContentView(R.layout.activity_place_selection);
         transparanEkran();
         variableDesc();
+        gidilecekYerler = new ArrayList<>();
 
         intent = getIntent();
         gelis = intent.getStringExtra("gelis");
@@ -70,7 +73,7 @@ public class placeSelection extends AppCompatActivity {
         adapter = new classAdapter(this, aktar);
         listPlace.setAdapter(adapter);
 
-        //edittext değerine göre view değeri değişir.
+
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -104,17 +107,24 @@ public class placeSelection extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                dataTur model = gecici.get(i);
+                model = aktar.get(i);
+                System.out.println("Model " + model.getid());
 
                 if (model.isSelected()) {
                     model.setSelected(false);
+                    Toast.makeText(getApplicationContext(), "Rotadan " + model.getTurAd() + " Çıkarıldı.", Toast.LENGTH_SHORT).show();
+
                 } else {
-                    model.setSelected(true);
+                    if (adapter.secilmis() < 12) {
+                        model.setSelected(true);
+                        Toast.makeText(getApplicationContext(), "Rotaya " + model.getTurAd() + " Eklendi.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Rotaya en fazla 12 yere gidebilirsiniz.", Toast.LENGTH_SHORT).show();
+                    }
                 }
 
-                gecici.set(i, model);
-
-                adapter.updateRecords(gecici);
+                aktar.set(i, model);
+                adapter.updateRecords(aktar);
             }
         });
 
@@ -127,14 +137,23 @@ public class placeSelection extends AppCompatActivity {
     }
 
     private void btnRotaClick() {
-        int a = 0;
-        for (dataTur fe : aktar) {
-            if (fe.isSelected()) {
-                a++;
+
+        gidilecekYerler.clear();
+
+        for (int i = 0; i < aktar.size(); i++) {
+
+            if (aktar.get(i).isSelected() == true) {
+                gidilecekYerler.add(new dataTur(aktar.get(i).getTurAd(), aktar.get(i).getTurDetay(), aktar.get(i).getTurEnlem(), aktar.get(i).getTurBoylam()));
             }
         }
-        System.out.println("Seçilen sayı" + a);
 
+        if (gidilecekYerler.size() <= 12 && gidilecekYerler.size() >= 2) {
+            Intent intent = new Intent(getApplicationContext(), mapbox.class);
+
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, "En Az 2 yer Seçmeniz Gerekir", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // geri butonu
